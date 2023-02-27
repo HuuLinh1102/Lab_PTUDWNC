@@ -1,0 +1,15 @@
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\bin\Debug\net7.0\TatBlog.Data.deps.json
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\bin\Debug\net7.0\TatBlog.Data.dll
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\bin\Debug\net7.0\TatBlog.Data.pdb
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\bin\Debug\net7.0\TatBlog.Core.dll
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\bin\Debug\net7.0\TatBlog.Core.pdb
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\TatBlog.Data.csproj.AssemblyReference.cache
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\TatBlog.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\TatBlog.Data.AssemblyInfoInputs.cache
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\TatBlog.Data.AssemblyInfo.cs
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\TatBlog.Data.csproj.CoreCompileInputs.cache
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\TatBlog.Data.csproj.CopyComplete
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\TatBlog.Data.dll
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\refint\TatBlog.Data.dll
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\TatBlog.Data.pdb
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.Data\obj\Debug\net7.0\ref\TatBlog.Data.dll
