@@ -58,9 +58,7 @@ namespace TatBlog.Services.Blogs
         Task DeleteByIdAsync<T>(int id) where T : class, new();
 
         // Thêm hoặc cập nhật một chuyên mục/chủ đề.
-        Task<Category> AddOrUpdateCategoryAsync(int id, 
-            string name, 
-            string description);
+        Task<Category> AddOrUpdateCategoryAsync(Category category);
 
         // Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
         Task<bool> IsSlugExists(string slug);
@@ -72,5 +70,17 @@ namespace TatBlog.Services.Blogs
 
         // Đếm số lượng bài viết trong N tháng gần nhất
         Task<IList<MonthlyPostCount>> GetMonthlyPostCountsAsync(int months);
+
+        // Thêm hay cập nhật một bài viết. 
+        Task<Post> AddOrUpdatePostAsync(Post post);
+
+        // Chuyển đổi trạng thái Published của bài viết.
+        Task<bool> ChangePostPublishedStatus(int id);
+
+        // Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
+        Task<IPagedList<T>> SearchAsync<T>(PostQuery query, 
+            Func<IQueryable<Post>,  IQueryable<T>> mapper,
+            IPagingParams pagingParams,
+            CancellationToken cancellationToken = default);
     }
 }

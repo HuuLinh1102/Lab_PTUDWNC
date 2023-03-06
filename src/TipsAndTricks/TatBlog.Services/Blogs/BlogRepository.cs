@@ -29,9 +29,9 @@ namespace TatBlog.Services.Blogs
         // Tìm bài viết có tên định danh là "slug"
         // và được đăng vào tháng 'month' năm year'
         public async Task<Post> GetPostAsync(
-            int year, 
+            int year,
             int month,
-            string slug, 
+            string slug,
             CancellationToken cancellationToken = default)
         {
             IQueryable<Post> postsQuery = _context.Set<Post>()
@@ -41,16 +41,16 @@ namespace TatBlog.Services.Blogs
             if (year > 0)
             {
                 postsQuery = postsQuery.Where(x => x.PostedDate.Year == year);
-            }    
+            }
             if (month > 0)
             {
                 postsQuery = postsQuery.Where(x => x.PostedDate.Month == month);
-            }    
+            }
             if (!string.IsNullOrWhiteSpace(slug))
             {
                 postsQuery = postsQuery.Where(x => x.UrlSlug == slug);
-            }    
-                
+            }
+
             return await postsQuery.FirstOrDefaultAsync(cancellationToken);
         }
 
@@ -79,18 +79,18 @@ namespace TatBlog.Services.Blogs
 
 
         // Tăng số lượt xem của một bài viết
-        public async Task IncreaseViewCountAsync( 
-            int postId,CancellationToken cancellationToken = default)
+        public async Task IncreaseViewCountAsync(
+            int postId, CancellationToken cancellationToken = default)
         {
             await _context.Set<Post>()
                 .Where(x => x.Id == postId)
-                .ExecuteUpdateAsync(p => 
-                p.SetProperty(x => x.ViewCount, x => x.ViewCount + 1), 
+                .ExecuteUpdateAsync(p =>
+                p.SetProperty(x => x.ViewCount, x => x.ViewCount + 1),
                 cancellationToken);
         }
 
         public async Task<IList<CategoryItem>> GetCategoriesAsync(
-            bool showOnMenu = false, 
+            bool showOnMenu = false,
             CancellationToken cancellationToken = default)
         {
             IQueryable<Category> categories = _context.Set<Category>();
@@ -99,27 +99,27 @@ namespace TatBlog.Services.Blogs
             {
                 categories = categories.Where(x => x.ShowOnMenu);
             }
-             return await categories
-                .OrderBy(x => x.Name)
-                .Select(x => new CategoryItem()
-                {
-                    Id = x.Id,
+            return await categories
+               .OrderBy(x => x.Name)
+               .Select(x => new CategoryItem()
+               {
+                   Id = x.Id,
 
-                    Name = x.Name,
+                   Name = x.Name,
 
-                    UrlSlug = x.UrlSlug,
+                   UrlSlug = x.UrlSlug,
 
-                    Description = x.Description,
+                   Description = x.Description,
 
-                    ShowOnMenu = x.ShowOnMenu,
+                   ShowOnMenu = x.ShowOnMenu,
 
-                    PostCount = x.Posts.Count(p => p.Published)
-                })
-                .ToListAsync(cancellationToken);
+                   PostCount = x.Posts.Count(p => p.Published)
+               })
+               .ToListAsync(cancellationToken);
         }
 
         public async Task<IPagedList<TagItem>> GetPagedTagsAsync(
-            IPagingParams pagingParams, 
+            IPagingParams pagingParams,
             CancellationToken cancellationToken = default)
 
         {
@@ -155,7 +155,7 @@ namespace TatBlog.Services.Blogs
             CancellationToken cancellationToken = default)
         {
             IQueryable<Tag> tags = _context.Set<Tag>();
-           
+
             return await tags
                .OrderBy(t => t.Name)
                .Select(t => new TagItem()
@@ -174,7 +174,7 @@ namespace TatBlog.Services.Blogs
         }
 
         // Xóa một thẻ,danh mục theo mã cho trước. 
-        public async Task DeleteByIdAsync<T>(int id) where T: class, new()
+        public async Task DeleteByIdAsync<T>(int id) where T : class, new()
         {
             // tìm thẻ có id đó
             var entity = await _context.Set<T>().FindAsync(id);
@@ -190,32 +190,37 @@ namespace TatBlog.Services.Blogs
             }
         }
 
-        
+
         // Thêm hoặc cập nhật một chuyên mục/chủ đề.
-        public async Task<Category> AddOrUpdateCategoryAsync(int id, string name, string description)
+        public async Task<Category> AddOrUpdateCategoryAsync(Category category)
         {
-            var category = new Category();
-            if (id == null)
+            if (category == null)
+            {
+                Console.WriteLine("No category value is passed in.");
+            }
+            if (category.Id == 0)
             {
                 // thêm mới danh mục
-                category.Name = name;
-                category.UrlSlug = GenerateSlug(name);
-                category.Description = description;
+                category.Name = category.Name;
+                category.UrlSlug = GenerateSlug(category.Name);
+                category.Description = category.Description;
                 await _context.Categories.AddAsync(category);
+                Console.WriteLine("Successfully added category.");
             }
             else
             {
                 // cập nhập danh mục 
-                var existingCategory = await _context.Categories.FindAsync(id);
+                var existingCategory = await _context.Categories.FindAsync(category.Id);
 
                 if (existingCategory == null)
                 {
                     Console.WriteLine($"Category with id {category.Id} not found.");
                 }
 
-                existingCategory.Name = name;
-                existingCategory.UrlSlug = GenerateSlug(name);
-                existingCategory.Description = description;
+                existingCategory.Name = category.Name;
+                existingCategory.UrlSlug = GenerateSlug(category.Name);
+                existingCategory.Description = category.Description;
+                Console.WriteLine("Successfully updated category.");
             }
 
             await _context.SaveChangesAsync();
@@ -302,7 +307,125 @@ namespace TatBlog.Services.Blogs
             return monthlyCounts;
         }
 
-        
-        
+        // Thêm hay cập nhật một bài viết. 
+        public async Task<Post> AddOrUpdatePostAsync(Post post)
+        {
+            if (post == null)
+            {
+                Console.WriteLine("No category value is passed in.");
+            }
+            if (post.Id == 0)
+            {
+                // thêm mới danh mục
+                //post.Title = post.Title;
+                //post.ShortDescription = post.ShortDescription;
+                //post.Description = post.Description;
+                //post.Meta = post.Meta;
+                post.UrlSlug = GenerateSlug(post.Title);
+                //post.Published = post.Published;
+                //post.PostedDate = post.PostedDate;
+                //post.ModifiedDate = post.ModifiedDate;
+                //post.ViewCount = post.ViewCount;
+                //post.Author = post.Author;
+                //post.Category = post.Category;
+                //post.Tags = post.Tags;
+                post.PostedDate = DateTime.Now;
+
+                await _context.Posts.AddAsync(post);
+                Console.WriteLine("Successfully added post");
+            }
+            else
+            {
+                // cập nhập bài viết
+                var existingPost = await _context.Posts.FindAsync(post.Id);
+
+                if (existingPost == null)
+                {
+                    Console.WriteLine($"Post with id {post.Id} not found.");
+                }
+                existingPost.Title = post.Title;
+                existingPost.ShortDescription = post.ShortDescription;
+                existingPost.Description = post.Description;
+                existingPost.Meta = post.Meta;
+                existingPost.UrlSlug = GenerateSlug(post.Title);
+                existingPost.Published = post.Published;
+                existingPost.ModifiedDate = post.Published ? DateTime.Now : (DateTime?)null; // kiểm tra xewm nó được xuất bản chưa nếu r thì cập nhật thời gian
+                existingPost.Category = post.Category;
+                existingPost.Tags = post.Tags;
+                Console.WriteLine("Successfully updated p");
+            }
+
+            await _context.SaveChangesAsync();
+
+            return post;
+        }
+
+        // Chuyển đổi trạng thái Published của bài viết. 
+        public async Task<bool> ChangePostPublishedStatus(int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+
+            if (post == null)
+            {
+                Console.WriteLine($"Post with id {id} not found.");
+            }
+
+            post.Published = !post.Published;
+
+            if (post.Published)
+            {
+                post.PostedDate = DateTime.Now;
+            }
+
+            _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
+
+            return post.Published;
+        }
+
+        // Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
+        public async Task<IPagedList<T>> SearchAsync<T>(PostQuery query, Func<IQueryable<Post>, IQueryable<T>> mapper, 
+            IPagingParams pagingParams,
+            CancellationToken cancellationToken = default)
+        {
+            var posts = _context.Posts.Where(p => p.Published);
+
+            // Thực hiện các bộ lọc tìm kiếm trên đối tượng query
+            if (!string.IsNullOrEmpty(query.Keyword))
+            {
+                posts = posts.Where(p => p.Title.Contains(query.Keyword));
+            }
+            if (query.AuthorId.HasValue)
+            {
+                posts = posts.Where(p => p.Author.Id == query.AuthorId.Value);
+            }
+            if (query.CategoryId.HasValue)
+            {
+                posts = posts.Where(p => p.Category.Id == query.CategoryId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(query.CategorySlug))
+            {
+                posts = posts.Where(p => p.UrlSlug.Contains(query.CategorySlug));
+            }
+            if (query.Year != null)
+            {
+                posts = posts.Where(p => p.PostedDate.Year == query.Year);
+            }
+
+            if (query.Month != null)
+            {
+                posts = posts.Where(p => p.PostedDate.Month == query.Month);
+            }
+
+            // Sắp xếp các bài viết theo thứ tự mới nhất
+            posts = posts.OrderByDescending(p => p.PostedDate);
+            // Ánh xạ các đối tượng Post thành các đối tượng T bằng mapper
+            var items = mapper(posts);
+            // Phân trang các đối tượng T bằng thư viện PagedList
+            return await items.ToPagedListAsync(pagingParams, cancellationToken);
+        }
+
+
     }
 }
