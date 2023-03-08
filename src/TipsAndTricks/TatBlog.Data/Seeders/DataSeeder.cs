@@ -9,7 +9,7 @@ using TatBlog.Data.Contexts;
 
 namespace TatBlog.Data.Seeders
 {
-    public class DataSeeder
+    public class DataSeeder : IDataSeeder
     {
         private readonly BlogDbContext _dbConText;
 

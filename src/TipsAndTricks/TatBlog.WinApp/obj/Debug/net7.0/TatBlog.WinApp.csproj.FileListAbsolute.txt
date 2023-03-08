@@ -38,6 +38,7 @@ D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\Syst
 D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\System.Configuration.ConfigurationManager.dll
 D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\System.Drawing.Common.dll
 D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\System.Linq.Dynamic.Core.dll
 D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\System.Memory.Data.dll
 D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\System.Runtime.Caching.dll
 D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\System.Security.Cryptography.ProtectedData.dll
@@ -72,4 +73,3 @@ D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\obj\Debug\net7.0\refi
 D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\obj\Debug\net7.0\TatBlog.WinApp.pdb
 D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\obj\Debug\net7.0\TatBlog.WinApp.genruntimeconfig.cache
 D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\obj\Debug\net7.0\ref\TatBlog.WinApp.dll
-D:\WebNangCao\Lab_PTUDWNC\src\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\System.Linq.Dynamic.Core.dll
