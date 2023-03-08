@@ -10,10 +10,13 @@ namespace TatBlog.Core.DTO
     {
         // cho phép null
         public int? AuthorId { get; set; }
+        public string AuthorSlug { get; set; }
         public int? CategoryId { get; set; }
         public string CategorySlug { get; set; }
-        public int? Year { get; set; }
+		public string TagSlug { get; set; }
+		public int? Year { get; set; }
         public int? Month { get; set; }
+        public bool? PublishedOnly { get; set; }
         public string Keyword { get; set; }
     }
 }

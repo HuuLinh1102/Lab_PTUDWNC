@@ -253,7 +253,8 @@ namespace TatBlog.Services.Blogs
         {
             var categories = await GetCategoriesAsync();
 
-            return categories.Any(c => c.UrlSlug.Equals(slug, StringComparison.OrdinalIgnoreCase)); // không phân biệt hoa thường
+            return categories.Any(c => c.UrlSlug.Equals(slug, 
+                StringComparison.OrdinalIgnoreCase)); // không phân biệt hoa thường
         }
 
         // Lấy và phân trang danh sách chuyên mục
@@ -383,15 +384,70 @@ namespace TatBlog.Services.Blogs
             return post.Published;
         }
 
-        // Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
-        public async Task<IPagedList<T>> SearchAsync<T>(PostQuery query, Func<IQueryable<Post>, IQueryable<T>> mapper, 
-            IPagingParams pagingParams,
+		// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
+
+		public async Task<IPagedList<Post>> GetPagedPostsAsync(
+            PostQuery query,
+			int pageNumber = 1,
+			int pageSize = 10,
+			CancellationToken cancellationToken = default)
+		{
+			var posts = _context.Posts
+                .Include(p => p.Author)
+                .Include(p => p.Category)
+                .Include(p => p.Tags)
+                .Where(p => p.Published);
+
+			// Thực hiện các bộ lọc tìm kiếm trên đối tượng query
+			if (!string.IsNullOrEmpty(query.Keyword))
+			{
+				posts = posts.Where(p => p.Title.Contains(query.Keyword));
+			}
+			if (query.AuthorId.HasValue)
+			{
+				posts = posts.Where(p => p.Author.Id == query.AuthorId.Value);
+			}
+			if (query.CategoryId.HasValue)
+			{
+				posts = posts.Where(p => p.Category.Id == query.CategoryId.Value);
+			}
+
+			if (!string.IsNullOrEmpty(query.CategorySlug))
+			{
+				posts = posts.Where(p => p.UrlSlug.Contains(query.CategorySlug));
+			}
+			if (query.Year != null)
+			{
+				posts = posts.Where(p => p.PostedDate.Year == query.Year);
+			}
+
+			if (query.Month != null)
+			{
+				posts = posts.Where(p => p.PostedDate.Month == query.Month);
+			}
+
+			// Phân trang các bài post bằng thư viện PagedList
+			return await posts.ToPagedListAsync(
+				pageNumber, pageSize,
+				nameof(Post.PostedDate), "DESC",
+				cancellationToken);
+		}
+
+        // t.
+		public async Task<IPagedList<T>> GetPagedTAsync<T>(PostQuery query, 
+            Func<IQueryable<Post>, 
+                IQueryable<T>> mapper, 
+            int pageNumber = 1,
+            int pageSize = 10,
             CancellationToken cancellationToken = default)
         {
-            var posts = _context.Posts.Where(p => p.Published);
+			var posts = _context.Posts
+				.Include(p => p.Author)
+				.Include(p => p.Category)
+				.Where(p => p.Published);
 
-            // Thực hiện các bộ lọc tìm kiếm trên đối tượng query
-            if (!string.IsNullOrEmpty(query.Keyword))
+			// Thực hiện các bộ lọc tìm kiếm trên đối tượng query
+			if (!string.IsNullOrEmpty(query.Keyword))
             {
                 posts = posts.Where(p => p.Title.Contains(query.Keyword));
             }
@@ -418,13 +474,15 @@ namespace TatBlog.Services.Blogs
                 posts = posts.Where(p => p.PostedDate.Month == query.Month);
             }
 
-            // Sắp xếp các bài viết theo thứ tự mới nhất
-            posts = posts.OrderByDescending(p => p.PostedDate);
             // Ánh xạ các đối tượng Post thành các đối tượng T bằng mapper
             var items = mapper(posts);
             // Phân trang các đối tượng T bằng thư viện PagedList
-            return await items.ToPagedListAsync(pagingParams, cancellationToken);
+            return await items.ToPagedListAsync(
+                pageNumber, pageSize, 
+                nameof(Post.PostedDate), "DESC", 
+                cancellationToken);
         }
+
 
 
     }

@@ -78,9 +78,18 @@ namespace TatBlog.Services.Blogs
         Task<bool> ChangePostPublishedStatus(int id);
 
         // Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
-        Task<IPagedList<T>> SearchAsync<T>(PostQuery query, 
-            Func<IQueryable<Post>,  IQueryable<T>> mapper,
-            IPagingParams pagingParams,
+        Task<IPagedList<Post>> GetPagedPostsAsync(
+            PostQuery query,
+            int pageNumber = 1,
+            int pageSize = 10,
             CancellationToken cancellationToken = default);
-    }
+
+        // t.
+        Task<IPagedList<T>> GetPagedTAsync<T>(PostQuery query,
+            Func<IQueryable<Post>,
+                IQueryable<T>> mapper,
+            int pageNumber = 1,
+            int pageSize = 10,
+            CancellationToken cancellationToken = default);
+	}
 }
