@@ -42,5 +42,45 @@ namespace TatBlog.Services.Blogs
             IPagingParams pagingParams, 
             CancellationToken cancellationToken = default);
 
+
+        // Tìm một thẻ, chuyên mục, bài viết theo tên định danh (slug)
+        Task<T> FindBySlugAsync<T>(string slug) where T : class, IEntity;
+
+        // Tìm một thẻ, chuyên mục, bài viết theo id
+        Task<T> FindByIdAsync<T>(int id) where T : class, IEntity;
+
+
+        // Lấy danh sách tất cả các thẻ
+        Task<IList<TagItem>> GetTagsAsync(
+            CancellationToken cancellationToken = default);
+
+        // Xóa một thẻ,danh mục theo mã cho trước.
+        Task DeleteByIdAsync<T>(int id) where T : class, new();
+
+        // Thêm hoặc cập nhật một chuyên mục/chủ đề.
+        Task<Category> AddOrUpdateCategoryAsync(Category category);
+
+        // Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
+        Task<bool> IsSlugExists(string slug);
+
+        //Lấy và phân trang danh sách chuyên mục
+        Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(
+            IPagingParams pagingParams,
+            CancellationToken cancellationToken = default);
+
+        // Đếm số lượng bài viết trong N tháng gần nhất
+        Task<IList<MonthlyPostCount>> GetMonthlyPostCountsAsync(int months);
+
+        // Thêm hay cập nhật một bài viết. 
+        Task<Post> AddOrUpdatePostAsync(Post post);
+
+        // Chuyển đổi trạng thái Published của bài viết.
+        Task<bool> ChangePostPublishedStatus(int id);
+
+        // Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
+        Task<IPagedList<T>> SearchAsync<T>(PostQuery query, 
+            Func<IQueryable<Post>,  IQueryable<T>> mapper,
+            IPagingParams pagingParams,
+            CancellationToken cancellationToken = default);
     }
 }
