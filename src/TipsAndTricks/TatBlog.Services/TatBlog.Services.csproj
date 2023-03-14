@@ -12,12 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Media\" />
-    <Folder Include="Rss\" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.25" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.25" />
+    <Folder Include="Media\" />
+    <Folder Include="Rss\" />
   </ItemGroup>
 
 </Project>

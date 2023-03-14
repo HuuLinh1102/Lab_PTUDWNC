@@ -9,7 +9,7 @@ using TatBlog.Data.Contexts;
 
 namespace TatBlog.Data.Seeders
 {
-    public class DataSeeder
+    public class DataSeeder : IDataSeeder
     {
         private readonly BlogDbContext _dbConText;
 
@@ -236,7 +236,7 @@ namespace TatBlog.Data.Seeders
                     ShortDescription = "How to learn html and css",
                     Description = "How to learn html and css",
                     Meta = "How to learn html and css",
-                    UrlSlug = "fontend-developer-www",
+                    UrlSlug = "html-css-all-in-one",
                     Published = true,
                     PostedDate = new DateTime(2020, 8, 20, 11, 20, 0),
                     ModifiedDate = null,
@@ -254,7 +254,7 @@ namespace TatBlog.Data.Seeders
                     ShortDescription = "Raise cats and dogs",
                     Description = "How to raise cats and dogs so they don't fight?",
                     Meta = "Raise cats and dogs",
-                    UrlSlug = "dogs-core-diagnostic-scenarios",
+                    UrlSlug = "dog-and-cat",
                     Published = true,
                     PostedDate = new DateTime(2022, 8, 30, 10, 20, 0),
                     ModifiedDate = null,
@@ -272,7 +272,7 @@ namespace TatBlog.Data.Seeders
                     ShortDescription = "Qualifications are required...",
                     Description = "What qualifications are required for the architecture industry?",
                     Meta = "Qualifications are required...",
-                    UrlSlug = "qualifications-core-diagnostic-scenarios",
+                    UrlSlug = "what-qualifications-are",
                     Published = true,
                     PostedDate = new DateTime(2019, 6, 20, 10, 20, 0),
                     ModifiedDate = null,
