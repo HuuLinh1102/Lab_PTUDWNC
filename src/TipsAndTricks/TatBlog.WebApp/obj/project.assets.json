@@ -3309,11 +3309,19 @@
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
+      "projectUniqueName": "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab02-Practice\\TipsAndTricks\\TatBlog.WebApp\\TatBlog.WebApp.csproj",
+      "projectName": "TatBlog.WebApp",
+      "projectPath": "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab02-Practice\\TipsAndTricks\\TatBlog.WebApp\\TatBlog.WebApp.csproj",
+      "packagesPath": "C:\\Users\\taili\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab02-Practice\\TipsAndTricks\\TatBlog.WebApp\\obj\\",
+=======
       "projectUniqueName": "D:\\WebNangCao\\Lab_PTUDWNC\\src\\TipsAndTricks\\TatBlog.WebApp\\TatBlog.WebApp.csproj",
       "projectName": "TatBlog.WebApp",
       "projectPath": "D:\\WebNangCao\\Lab_PTUDWNC\\src\\TipsAndTricks\\TatBlog.WebApp\\TatBlog.WebApp.csproj",
       "packagesPath": "C:\\Users\\taili\\.nuget\\packages\\",
       "outputPath": "D:\\WebNangCao\\Lab_PTUDWNC\\src\\TipsAndTricks\\TatBlog.WebApp\\obj\\",
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\taili\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3330,6 +3338,16 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
+<<<<<<< HEAD
+            "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab02-Practice\\TipsAndTricks\\TatBlog.Core\\TatBlog.Core.csproj": {
+              "projectPath": "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab02-Practice\\TipsAndTricks\\TatBlog.Core\\TatBlog.Core.csproj"
+            },
+            "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab02-Practice\\TipsAndTricks\\TatBlog.Data\\TatBlog.Data.csproj": {
+              "projectPath": "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab02-Practice\\TipsAndTricks\\TatBlog.Data\\TatBlog.Data.csproj"
+            },
+            "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab02-Practice\\TipsAndTricks\\TatBlog.Services\\TatBlog.Services.csproj": {
+              "projectPath": "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab02-Practice\\TipsAndTricks\\TatBlog.Services\\TatBlog.Services.csproj"
+=======
             "D:\\WebNangCao\\Lab_PTUDWNC\\src\\TipsAndTricks\\TatBlog.Core\\TatBlog.Core.csproj": {
               "projectPath": "D:\\WebNangCao\\Lab_PTUDWNC\\src\\TipsAndTricks\\TatBlog.Core\\TatBlog.Core.csproj"
             },
@@ -3338,6 +3356,7 @@
             },
             "D:\\WebNangCao\\Lab_PTUDWNC\\src\\TipsAndTricks\\TatBlog.Services\\TatBlog.Services.csproj": {
               "projectPath": "D:\\WebNangCao\\Lab_PTUDWNC\\src\\TipsAndTricks\\TatBlog.Services\\TatBlog.Services.csproj"
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
             }
           }
         }
