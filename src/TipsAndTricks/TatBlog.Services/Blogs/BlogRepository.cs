@@ -1,8 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
+<<<<<<< HEAD
 
 using System.Text.RegularExpressions;
 
+=======
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -382,6 +389,7 @@ namespace TatBlog.Services.Blogs
         }
 
 		// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
+<<<<<<< HEAD
 		public async Task<IPagedList<Post>> GetPagedPostsAsync(
 		PostQuery condition,
 		int pageNumber = 1,
@@ -389,11 +397,57 @@ namespace TatBlog.Services.Blogs
 		CancellationToken cancellationToken = default)
 		{
 			return await FilterPosts(condition).ToPagedListAsync(
+=======
+
+		public async Task<IPagedList<Post>> GetPagedPostsAsync(
+            PostQuery query,
+			int pageNumber = 1,
+			int pageSize = 10,
+			CancellationToken cancellationToken = default)
+		{
+			var posts = _context.Posts
+                .Include(p => p.Author)
+                .Include(p => p.Category)
+                .Include(p => p.Tags)
+                .Where(p => p.Published);
+
+			// Thực hiện các bộ lọc tìm kiếm trên đối tượng query
+			if (!string.IsNullOrEmpty(query.Keyword))
+			{
+				posts = posts.Where(p => p.Title.Contains(query.Keyword));
+			}
+			if (query.AuthorId.HasValue)
+			{
+				posts = posts.Where(p => p.Author.Id == query.AuthorId.Value);
+			}
+			if (query.CategoryId.HasValue)
+			{
+				posts = posts.Where(p => p.Category.Id == query.CategoryId.Value);
+			}
+
+			if (!string.IsNullOrEmpty(query.CategorySlug))
+			{
+				posts = posts.Where(p => p.UrlSlug.Contains(query.CategorySlug));
+			}
+			if (query.Year != null)
+			{
+				posts = posts.Where(p => p.PostedDate.Year == query.Year);
+			}
+
+			if (query.Month != null)
+			{
+				posts = posts.Where(p => p.PostedDate.Month == query.Month);
+			}
+
+			// Phân trang các bài post bằng thư viện PagedList
+			return await posts.ToPagedListAsync(
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 				pageNumber, pageSize,
 				nameof(Post.PostedDate), "DESC",
 				cancellationToken);
 		}
 
+<<<<<<< HEAD
 		// t.
 		public async Task<IPagedList<T>> GetPagedPostsAsync<T>(
 		PostQuery condition,
@@ -476,4 +530,59 @@ namespace TatBlog.Services.Blogs
 		}
 
 	}
+=======
+        // t.
+		public async Task<IPagedList<T>> GetPagedTAsync<T>(PostQuery query, 
+            Func<IQueryable<Post>, 
+                IQueryable<T>> mapper, 
+            int pageNumber = 1,
+            int pageSize = 10,
+            CancellationToken cancellationToken = default)
+        {
+			var posts = _context.Posts
+				.Include(p => p.Author)
+				.Include(p => p.Category)
+				.Where(p => p.Published);
+
+			// Thực hiện các bộ lọc tìm kiếm trên đối tượng query
+			if (!string.IsNullOrEmpty(query.Keyword))
+            {
+                posts = posts.Where(p => p.Title.Contains(query.Keyword));
+            }
+            if (query.AuthorId.HasValue)
+            {
+                posts = posts.Where(p => p.Author.Id == query.AuthorId.Value);
+            }
+            if (query.CategoryId.HasValue)
+            {
+                posts = posts.Where(p => p.Category.Id == query.CategoryId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(query.CategorySlug))
+            {
+                posts = posts.Where(p => p.UrlSlug.Contains(query.CategorySlug));
+            }
+            if (query.Year != null)
+            {
+                posts = posts.Where(p => p.PostedDate.Year == query.Year);
+            }
+
+            if (query.Month != null)
+            {
+                posts = posts.Where(p => p.PostedDate.Month == query.Month);
+            }
+
+            // Ánh xạ các đối tượng Post thành các đối tượng T bằng mapper
+            var items = mapper(posts);
+            // Phân trang các đối tượng T bằng thư viện PagedList
+            return await items.ToPagedListAsync(
+                pageNumber, pageSize, 
+                nameof(Post.PostedDate), "DESC", 
+                cancellationToken);
+        }
+
+
+
+    }
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 }

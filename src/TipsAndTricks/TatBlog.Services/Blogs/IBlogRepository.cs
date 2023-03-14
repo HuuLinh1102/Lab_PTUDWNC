@@ -79,15 +79,28 @@ namespace TatBlog.Services.Blogs
 
         // Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
         Task<IPagedList<Post>> GetPagedPostsAsync(
+<<<<<<< HEAD
             PostQuery condition,
+=======
+            PostQuery query,
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
             int pageNumber = 1,
             int pageSize = 10,
             CancellationToken cancellationToken = default);
 
         // t.
+<<<<<<< HEAD
         Task<IPagedList<T>> GetPagedPostsAsync<T>(
             PostQuery condition,
             IPagingParams pagingParams,
             Func<IQueryable<Post>, IQueryable<T>> mapper);
+=======
+        Task<IPagedList<T>> GetPagedTAsync<T>(PostQuery query,
+            Func<IQueryable<Post>,
+                IQueryable<T>> mapper,
+            int pageNumber = 1,
+            int pageSize = 10,
+            CancellationToken cancellationToken = default);
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 	}
 }

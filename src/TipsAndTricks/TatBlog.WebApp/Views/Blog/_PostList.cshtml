@@ -16,6 +16,7 @@
 			<div class="col-md-8">
 				<div class="card-body">
 					<h5 class="card-title">
+<<<<<<< HEAD
 						<a href="@Url.Action("post", "blog", 
 							new { 
 								year = @Model.PostedDate.Year, 
@@ -24,25 +25,36 @@
 								slug = @Model.UrlSlug })">
 								@Model.Title
 						</a>
+=======
+						@Model.Title
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 					</h5>
 					<p class="card-text">
 						<small class="text-muted">
 							Tác giả:
 						</small>
 						<span class="text-primary">
+<<<<<<< HEAD
 							<a href="@Url.Action("author", "blog", 
 								new {slug = @Model.Author.UrlSlug })">
 									@Model.Author.FullName
 							</a>
+=======
+							@Model.Author.FullName
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 						</span>
 						<small class="text-muted">
 							Chủ đề:
 						</small>
 						<span class="text-primary">
+<<<<<<< HEAD
 							<a href="@Url.Action("category", "blog", 
 								new {slug = @Model.Category.UrlSlug })">
 									@Model.Category.Name
 							</a>
+=======
+							@Model.Category.Name
+>>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 						</span>
 					</p>
 					<p class="card-text">
