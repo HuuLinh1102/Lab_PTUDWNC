@@ -1,15 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
-<<<<<<< HEAD
 
 using System.Text.RegularExpressions;
 
-=======
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -58,6 +51,37 @@ namespace TatBlog.Services.Blogs
             return await postsQuery.FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<Author> GetAuthorAsync(
+            string slug, 
+            CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Author>()
+                .FirstOrDefaultAsync(a => a.UrlSlug == slug, cancellationToken);
+        }
+
+        public async Task<Author> GetAuthorByIdAsync(int authorId)
+        {
+            return await _context.Set<Author>().FindAsync(authorId);
+        }
+
+        public async Task<IList<AuthorItem>> GetAuthorsAsync(
+            CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Author>()
+                .OrderBy(a => a.FullName)
+                .Select(a => new AuthorItem()
+                {
+                    Id = a.Id,
+                    FullName = a.FullName,
+                    Email = a.ToString(),
+                    JoinedDate = a.JoinedDate,
+                    ImageUrl = a.ImageUrl,
+                    UrlSlug = a.UrlSlug,
+                    Notes = a.Notes,
+                    PostCount = a.Posts.Count(p => p.Published)
+                })
+                .ToListAsync(cancellationToken);
+        }
 
         // Tìm Top N bài viết phổ được nhiều người xem nhất 
         public async Task<IList<Post>> GetPopularArticlesAsync(
@@ -122,6 +146,23 @@ namespace TatBlog.Services.Blogs
                .ToListAsync(cancellationToken);
         }
 
+
+        public async Task<Post> GetPostByIdAsync(
+        int postId, bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+        {
+            if (!includeDetails)
+            {
+                return await _context.Set<Post>().FindAsync(postId);
+            }
+
+            return await _context.Set<Post>()
+                .Include(x => x.Category)
+                .Include(x => x.Author)
+                .Include(x => x.Tags)
+                .FirstOrDefaultAsync(x => x.Id == postId, cancellationToken);
+        }
+
         public async Task<IPagedList<TagItem>> GetPagedTagsAsync(
             IPagingParams pagingParams,
             CancellationToken cancellationToken = default)
@@ -154,31 +195,32 @@ namespace TatBlog.Services.Blogs
             return await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        // Lấy danh sách tất cả các thẻ
-        public async Task<IList<TagItem>> GetTagsAsync(
-            CancellationToken cancellationToken = default)
-        {
-            IQueryable<Tag> tags = _context.Set<Tag>();
+		public async Task<Tag> GetTagAsync(
+		string slug, CancellationToken cancellationToken = default)
+		{
+			return await _context.Set<Tag>()
+				.FirstOrDefaultAsync(x => x.UrlSlug == slug, cancellationToken);
+		}
 
-            return await tags
-               .OrderBy(t => t.Name)
-               .Select(t => new TagItem()
-               {
-                   Id = t.Id,
+		// Lấy danh sách tất cả các thẻ
+		public async Task<IList<TagItem>> GetTagsAsync(
+		 CancellationToken cancellationToken = default)
+		{
+			return await _context.Set<Tag>()
+				.OrderBy(x => x.Name)
+				.Select(x => new TagItem()
+				{
+					Id = x.Id,
+					Name = x.Name,
+					UrlSlug = x.UrlSlug,
+					Description = x.Description,
+					PostCount = x.Posts.Count(p => p.Published)
+				})
+				.ToListAsync(cancellationToken);
+		}
 
-                   Name = t.Name,
-
-                   UrlSlug = t.UrlSlug,
-
-                   Description = t.Description,
-
-                   PostCount = t.Posts.Count(p => p.Published)
-               })
-               .ToListAsync(cancellationToken);
-        }
-
-        // Xóa một thẻ,danh mục theo mã cho trước. 
-        public async Task DeleteByIdAsync<T>(int id) where T : class, new()
+		// Xóa một thẻ,danh mục theo mã cho trước. 
+		public async Task DeleteByIdAsync<T>(int id) where T : class, new()
         {
             // tìm thẻ có id đó
             var entity = await _context.Set<T>().FindAsync(id);
@@ -195,44 +237,60 @@ namespace TatBlog.Services.Blogs
         }
 
 
-        // Thêm hoặc cập nhật một chuyên mục/chủ đề.
-        public async Task<Category> AddOrUpdateCategoryAsync(Category category)
-        {
-            if (category == null)
-            {
-                Console.WriteLine("No category value is passed in.");
-            }
-            if (category.Id == 0)
-            {
-                // thêm mới danh mục
-                category.Name = category.Name;
-                category.UrlSlug = GenerateSlug(category.Name);
-                category.Description = category.Description;
-                await _context.Categories.AddAsync(category);
-                Console.WriteLine("Successfully added category.");
-            }
-            else
-            {
-                // cập nhập danh mục 
-                var existingCategory = await _context.Categories.FindAsync(category.Id);
+		// Thêm hoặc cập nhật một bài viết.
+		public async Task<Post> CreateOrUpdatePostAsync(
+		Post post, IEnumerable<string> tags,
+		CancellationToken cancellationToken = default)
+		{
+			if (post.Id > 0)
+			{
+				await _context.Entry(post).Collection(x => x.Tags).LoadAsync(cancellationToken);
+			}
+			else
+			{
+				post.Tags = new List<Tag>();
+			}
 
-                if (existingCategory == null)
+            var validTags = tags.Where(x => !string.IsNullOrWhiteSpace(x))
+                .Select(x => new
                 {
-                    Console.WriteLine($"Category with id {category.Id} not found.");
-                }
+                    Name = x,
+                    Slug = GenerateSlug(x)
+                })
+				.GroupBy(x => x.Slug)
+				.ToDictionary(g => g.Key, g => g.First().Name);
 
-                existingCategory.Name = category.Name;
-                existingCategory.UrlSlug = GenerateSlug(category.Name);
-                existingCategory.Description = category.Description;
-                Console.WriteLine("Successfully updated category.");
-            }
 
-            await _context.SaveChangesAsync();
+			foreach (var kv in validTags)
+			{
+				if (post.Tags.Any(x => string.Compare(x.UrlSlug, kv.Key, StringComparison.InvariantCultureIgnoreCase) == 0)) continue;
 
-            return category;
-        }
-        // Tạo tên định danh (slug)
-        private static string GenerateSlug(string phrase)
+				var tag = await GetTagAsync(kv.Key, cancellationToken) ?? new Tag()
+				{
+					Name = kv.Value,
+					Description = kv.Value,
+					UrlSlug = kv.Key
+				};
+
+				post.Tags.Add(tag);
+			}
+
+			post.Tags = post.Tags.Where(t => validTags.ContainsKey(t.UrlSlug)).ToList();
+
+			if (post.Id > 0)
+				_context.Update(post);
+			else
+				_context.Add(post);
+
+			await _context.SaveChangesAsync(cancellationToken);
+
+			return post;
+		}
+
+		
+
+		// Tạo tên định danh (slug)
+		private static string GenerateSlug(string phrase)
         {
             var str = phrase.ToLowerInvariant().Trim();
 
@@ -312,61 +370,27 @@ namespace TatBlog.Services.Blogs
             return monthlyCounts;
         }
 
-        // Thêm hay cập nhật một bài viết. 
-        public async Task<Post> AddOrUpdatePostAsync(Post post)
-        {
-            if (post == null)
-            {
-                Console.WriteLine("No category value is passed in.");
-            }
-            if (post.Id == 0)
-            {
-                // thêm mới danh mục
-                //post.Title = post.Title;
-                //post.ShortDescription = post.ShortDescription;
-                //post.Description = post.Description;
-                //post.Meta = post.Meta;
-                post.UrlSlug = GenerateSlug(post.Title);
-                //post.Published = post.Published;
-                //post.PostedDate = post.PostedDate;
-                //post.ModifiedDate = post.ModifiedDate;
-                //post.ViewCount = post.ViewCount;
-                //post.Author = post.Author;
-                //post.Category = post.Category;
-                //post.Tags = post.Tags;
-                post.PostedDate = DateTime.Now;
+		// Thêm hay cập nhật một chuyên mục/chủ đề. 
+		public async Task<Category> CreateOrUpdateCategoryAsync(
+		Category category, CancellationToken cancellationToken = default)
+		{
+			if (category.Id > 0)
+			{
+				_context.Set<Category>().Update(category);
+			}
+			else
+			{
+				_context.Set<Category>().Add(category);
+			}
 
-                await _context.Posts.AddAsync(post);
-                Console.WriteLine("Successfully added post");
-            }
-            else
-            {
-                // cập nhập bài viết
-                var existingPost = await _context.Posts.FindAsync(post.Id);
+			await _context.SaveChangesAsync(cancellationToken);
 
-                if (existingPost == null)
-                {
-                    Console.WriteLine($"Post with id {post.Id} not found.");
-                }
-                existingPost.Title = post.Title;
-                existingPost.ShortDescription = post.ShortDescription;
-                existingPost.Description = post.Description;
-                existingPost.Meta = post.Meta;
-                existingPost.UrlSlug = GenerateSlug(post.Title);
-                existingPost.Published = post.Published;
-                existingPost.ModifiedDate = post.Published ? DateTime.Now : (DateTime?)null; // kiểm tra xewm nó được xuất bản chưa nếu r thì cập nhật thời gian
-                existingPost.Category = post.Category;
-                existingPost.Tags = post.Tags;
-                Console.WriteLine("Successfully updated p");
-            }
+			return category;
+		}
 
-            await _context.SaveChangesAsync();
 
-            return post;
-        }
-
-        // Chuyển đổi trạng thái Published của bài viết. 
-        public async Task<bool> ChangePostPublishedStatus(int id)
+		// Chuyển đổi trạng thái Published của bài viết. 
+		public async Task<bool> ChangePostPublishedStatus(int id)
         {
             var post = await _context.Posts.FindAsync(id);
 
@@ -389,7 +413,6 @@ namespace TatBlog.Services.Blogs
         }
 
 		// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
-<<<<<<< HEAD
 		public async Task<IPagedList<Post>> GetPagedPostsAsync(
 		PostQuery condition,
 		int pageNumber = 1,
@@ -397,57 +420,11 @@ namespace TatBlog.Services.Blogs
 		CancellationToken cancellationToken = default)
 		{
 			return await FilterPosts(condition).ToPagedListAsync(
-=======
-
-		public async Task<IPagedList<Post>> GetPagedPostsAsync(
-            PostQuery query,
-			int pageNumber = 1,
-			int pageSize = 10,
-			CancellationToken cancellationToken = default)
-		{
-			var posts = _context.Posts
-                .Include(p => p.Author)
-                .Include(p => p.Category)
-                .Include(p => p.Tags)
-                .Where(p => p.Published);
-
-			// Thực hiện các bộ lọc tìm kiếm trên đối tượng query
-			if (!string.IsNullOrEmpty(query.Keyword))
-			{
-				posts = posts.Where(p => p.Title.Contains(query.Keyword));
-			}
-			if (query.AuthorId.HasValue)
-			{
-				posts = posts.Where(p => p.Author.Id == query.AuthorId.Value);
-			}
-			if (query.CategoryId.HasValue)
-			{
-				posts = posts.Where(p => p.Category.Id == query.CategoryId.Value);
-			}
-
-			if (!string.IsNullOrEmpty(query.CategorySlug))
-			{
-				posts = posts.Where(p => p.UrlSlug.Contains(query.CategorySlug));
-			}
-			if (query.Year != null)
-			{
-				posts = posts.Where(p => p.PostedDate.Year == query.Year);
-			}
-
-			if (query.Month != null)
-			{
-				posts = posts.Where(p => p.PostedDate.Month == query.Month);
-			}
-
-			// Phân trang các bài post bằng thư viện PagedList
-			return await posts.ToPagedListAsync(
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 				pageNumber, pageSize,
 				nameof(Post.PostedDate), "DESC",
 				cancellationToken);
 		}
 
-<<<<<<< HEAD
 		// t.
 		public async Task<IPagedList<T>> GetPagedPostsAsync<T>(
 		PostQuery condition,
@@ -530,59 +507,4 @@ namespace TatBlog.Services.Blogs
 		}
 
 	}
-=======
-        // t.
-		public async Task<IPagedList<T>> GetPagedTAsync<T>(PostQuery query, 
-            Func<IQueryable<Post>, 
-                IQueryable<T>> mapper, 
-            int pageNumber = 1,
-            int pageSize = 10,
-            CancellationToken cancellationToken = default)
-        {
-			var posts = _context.Posts
-				.Include(p => p.Author)
-				.Include(p => p.Category)
-				.Where(p => p.Published);
-
-			// Thực hiện các bộ lọc tìm kiếm trên đối tượng query
-			if (!string.IsNullOrEmpty(query.Keyword))
-            {
-                posts = posts.Where(p => p.Title.Contains(query.Keyword));
-            }
-            if (query.AuthorId.HasValue)
-            {
-                posts = posts.Where(p => p.Author.Id == query.AuthorId.Value);
-            }
-            if (query.CategoryId.HasValue)
-            {
-                posts = posts.Where(p => p.Category.Id == query.CategoryId.Value);
-            }
-
-            if (!string.IsNullOrEmpty(query.CategorySlug))
-            {
-                posts = posts.Where(p => p.UrlSlug.Contains(query.CategorySlug));
-            }
-            if (query.Year != null)
-            {
-                posts = posts.Where(p => p.PostedDate.Year == query.Year);
-            }
-
-            if (query.Month != null)
-            {
-                posts = posts.Where(p => p.PostedDate.Month == query.Month);
-            }
-
-            // Ánh xạ các đối tượng Post thành các đối tượng T bằng mapper
-            var items = mapper(posts);
-            // Phân trang các đối tượng T bằng thư viện PagedList
-            return await items.ToPagedListAsync(
-                pageNumber, pageSize, 
-                nameof(Post.PostedDate), "DESC", 
-                cancellationToken);
-        }
-
-
-
-    }
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 }

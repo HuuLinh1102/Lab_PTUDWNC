@@ -25,7 +25,7 @@ namespace TatBlog.Data.Mappings
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(a => a.ImageURL)
+            builder.Property(a => a.ImageUrl)
                 .HasMaxLength(500);
 
             builder.Property(a => a.Email)

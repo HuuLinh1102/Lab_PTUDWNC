@@ -1,4 +1,5 @@
 ﻿
+using System.Threading.Tasks;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -15,6 +16,16 @@ namespace TatBlog.Services.Blogs
             int month,
             string slug,
             CancellationToken cancellationToken = default);
+
+        Task<Author> GetAuthorAsync(
+            string slug,
+            CancellationToken cancellationToken = default);
+
+        Task<Author> GetAuthorByIdAsync(int authorId);
+
+        Task<IList<AuthorItem>> GetAuthorsAsync(
+            CancellationToken cancellationToken = default);
+
 
         // Tìm Top N bài viết phổ được nhiều người xem nhất
         Task<IList<Post>> GetPopularArticlesAsync(
@@ -49,19 +60,21 @@ namespace TatBlog.Services.Blogs
         // Tìm một thẻ, chuyên mục, bài viết theo id
         Task<T> FindByIdAsync<T>(int id) where T : class, IEntity;
 
-
-        // Lấy danh sách tất cả các thẻ
-        Task<IList<TagItem>> GetTagsAsync(
+        Task<Tag> GetTagAsync(
+        string slug, CancellationToken cancellationToken = default);
+		// Lấy danh sách tất cả các thẻ
+		Task<IList<TagItem>> GetTagsAsync(
             CancellationToken cancellationToken = default);
 
         // Xóa một thẻ,danh mục theo mã cho trước.
         Task DeleteByIdAsync<T>(int id) where T : class, new();
 
         // Thêm hoặc cập nhật một chuyên mục/chủ đề.
-        Task<Category> AddOrUpdateCategoryAsync(Category category);
+        Task<Category> CreateOrUpdateCategoryAsync(
+        Category category, CancellationToken cancellationToken = default);
 
-        // Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
-        Task<bool> IsSlugExists(string slug);
+		// Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
+		Task<bool> IsSlugExists(string slug);
 
         //Lấy và phân trang danh sách chuyên mục
         Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(
@@ -72,35 +85,31 @@ namespace TatBlog.Services.Blogs
         Task<IList<MonthlyPostCount>> GetMonthlyPostCountsAsync(int months);
 
         // Thêm hay cập nhật một bài viết. 
-        Task<Post> AddOrUpdatePostAsync(Post post);
+        Task<Post> CreateOrUpdatePostAsync(
+        Post post, IEnumerable<string> tags,
+        CancellationToken cancellationToken = default);
 
-        // Chuyển đổi trạng thái Published của bài viết.
-        Task<bool> ChangePostPublishedStatus(int id);
+        
+
+		// Chuyển đổi trạng thái Published của bài viết.
+		Task<bool> ChangePostPublishedStatus(int id);
 
         // Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
         Task<IPagedList<Post>> GetPagedPostsAsync(
-<<<<<<< HEAD
             PostQuery condition,
-=======
-            PostQuery query,
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
             int pageNumber = 1,
             int pageSize = 10,
             CancellationToken cancellationToken = default);
 
         // t.
-<<<<<<< HEAD
         Task<IPagedList<T>> GetPagedPostsAsync<T>(
             PostQuery condition,
             IPagingParams pagingParams,
             Func<IQueryable<Post>, IQueryable<T>> mapper);
-=======
-        Task<IPagedList<T>> GetPagedTAsync<T>(PostQuery query,
-            Func<IQueryable<Post>,
-                IQueryable<T>> mapper,
-            int pageNumber = 1,
-            int pageSize = 10,
-            CancellationToken cancellationToken = default);
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
-	}
+
+        Task<Post> GetPostByIdAsync(
+        int postId, bool includeDetails = false,
+        CancellationToken cancellationToken = default);
+
+    }
 }

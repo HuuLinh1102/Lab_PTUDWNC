@@ -228,6 +228,15 @@
         "LICENSE",
         "README.md"
       ]
+    },
+    {
+      "library": "speakingurl@14.0.1",
+      "destination": "wwwroot/lib/speakingurl/",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "speakingurl.min.js"
+      ]
     }
   ]
 }
