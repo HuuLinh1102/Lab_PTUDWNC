@@ -14,14 +14,11 @@
 				defaults: new { controller = "Blog", action = "Category" });
 
 			endpoints.MapControllerRoute(
-<<<<<<< HEAD
 				name: "posts-by-author",
 				pattern: "blog/author/{slug}",
 				defaults: new { controller = "Blog", action = "Author" });
 
 			endpoints.MapControllerRoute(
-=======
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 				name: "posts-by-tag",
 				pattern: "blog/tag/{slug}",
 				defaults: new { controller = "Blog", action = "Tag" });
@@ -32,9 +29,14 @@
 				defaults: new { controller = "Blog", action = "Post" });
 
 			endpoints.MapControllerRoute(
-				name: "default",
-				pattern: "{Controller=Blog}/{action=Index}/{id?}");
+				name: "admin-area",
+				pattern: "admin/{controller=Dashboard}/{action=Index}/{id?}",
+				defaults: new { area = "Admin" });
 
+			endpoints.MapControllerRoute(
+				name: "default",
+				pattern: "{controller=Blog}/{action=Index}/{id?}");
+	
 			return endpoints;
 		}
 	}

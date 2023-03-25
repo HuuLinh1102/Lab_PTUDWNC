@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TatBlog.Core.DTO;
-<<<<<<< HEAD
 using TatBlog.Core.Entities;
-=======
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
 using TatBlog.Services.Blogs;
 
 namespace TatBlog.WebApp.Controllers
@@ -23,12 +20,8 @@ namespace TatBlog.WebApp.Controllers
         public async Task<IActionResult> Index(
             [FromQuery(Name ="k")] string keyword = null,
             [FromQuery(Name = "p")] int pageNumber = 1,
-<<<<<<< HEAD
             [FromQuery(Name = "ps")] int pageSize = 10,
 			string slug = null) 
-=======
-            [FromQuery(Name = "ps")] int pageSize = 10) 
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
         {
             // Tạo đối tượng chứa các điều kiện truy vấn
             var postQuery = new PostQuery()
@@ -36,13 +29,9 @@ namespace TatBlog.WebApp.Controllers
                 // Chỉ lấy những bài viết có trạng thái Published
                 PublishedOnly = true,
                 // Tìm bài viết theo từ khóa
-<<<<<<< HEAD
                 Keyword = keyword,
                 
               
-=======
-                Keyword = keyword
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
             };
 
             // Truy vấn các bài viết theo điều kiện đã tạo
@@ -57,7 +46,6 @@ namespace TatBlog.WebApp.Controllers
         
         }
 
-<<<<<<< HEAD
         // Hiển thị bài viết theo chủ đề
         public async Task<IActionResult> Category(
 			string slug, 
@@ -144,12 +132,6 @@ namespace TatBlog.WebApp.Controllers
             => View();
 
         public IActionResult Contact()
-=======
-        public IActionResult About()
-            => View();
-
-        public IActionResult Contact() 
->>>>>>> 8f78ca59d326612ec5d6d800c3a2375fe0af6af1
             => View();
 
         public IActionResult Rss()
