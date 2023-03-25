@@ -11,11 +11,19 @@ namespace TatBlog.Services.Blogs
         // Tìm bài viết có tên định danh là "slug"
         // và được đăng vào tháng 'month' năm year'
 
+        Task<IList<Post>> GetPostsAsync(
+        PostQuery condition,
+        int pageNumber,
+        int pageSize,
+        CancellationToken cancellationToken = default);
+
         Task<Post> GetPostAsync(
-            int year,
-            int month,
-            string slug,
-            CancellationToken cancellationToken = default);
+        string slug,
+        CancellationToken cancellationToken = default);
+
+        Task<Post> GetPostDetailAsync(
+        PostQuery condition,
+        CancellationToken cancellationToken = default);
 
         Task<Author> GetAuthorAsync(
             string slug,
@@ -32,9 +40,18 @@ namespace TatBlog.Services.Blogs
             int numPosts, 
             CancellationToken cancellationToken = default);
 
-        // Kiểm tra xem tên định danh của bài viết đã có hay chưa
+        Task<IList<Author>> GetPopularAuthorsAsync(
+            int numAuthors,
+            CancellationToken cancellationToken = default);
 
-        Task<bool> IsPostSlugExistedAsync(
+
+		Task<IList<Post>> GetRandomArticlesAsync(
+        int numPosts, 
+        CancellationToken cancellationToken = default);
+
+		// Kiểm tra xem tên định danh của bài viết đã có hay chưa
+
+		Task<bool> IsPostSlugExistedAsync(
             int postId, string slug, 
             CancellationToken cancellationToken = default); 
         // Tăng số lượt xem của một bài viết
@@ -89,10 +106,11 @@ namespace TatBlog.Services.Blogs
         Post post, IEnumerable<string> tags,
         CancellationToken cancellationToken = default);
 
-        
 
-		// Chuyển đổi trạng thái Published của bài viết.
-		Task<bool> ChangePostPublishedStatus(int id);
+
+        // Chuyển đổi trạng thái Published của bài viết.
+        Task<bool> TogglePublishedFlagAsync(
+        int postId, CancellationToken cancellationToken = default);
 
         // Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
         Task<IPagedList<Post>> GetPagedPostsAsync(
@@ -111,5 +129,9 @@ namespace TatBlog.Services.Blogs
         int postId, bool includeDetails = false,
         CancellationToken cancellationToken = default);
 
-    }
+
+        Task<List<Post>> GetRelatedPostsAsync(
+            int postId, int categoryId);
+
+	}
 }

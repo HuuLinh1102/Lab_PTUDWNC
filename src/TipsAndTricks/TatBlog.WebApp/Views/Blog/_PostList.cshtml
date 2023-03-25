@@ -16,7 +16,7 @@
 			<div class="col-md-8">
 				<div class="card-body">
 					<h5 class="card-title">
-						<a href="@Url.Action("post", "blog", 
+						<a class="text-decoration-none" href="@Url.Action("post", "blog",
 							new { 
 								year = @Model.PostedDate.Year, 
 								month = @Model.PostedDate.Month, 
@@ -25,12 +25,12 @@
 								@Model.Title
 						</a>
 					</h5>
-					<p class="card-text">
+					<p class="card-text text-decoration-none">
 						<small class="text-muted">
 							Tác giả:
 						</small>
-						<span class="text-primary">
-							<a href="@Url.Action("author", "blog", 
+						<span class="text-primary ">
+							<a class=" text-decoration-none" href="@Url.Action("author", "blog",
 								new {slug = @Model.Author.UrlSlug })">
 									@Model.Author.FullName
 							</a>
@@ -38,14 +38,14 @@
 						<small class="text-muted">
 							Chủ đề:
 						</small>
-						<span class="text-primary">
-							<a href="@Url.Action("category", "blog", 
+						<span class="text-primary text-decoration-none">
+							<a class=" text-decoration-none" href="@Url.Action("category", "blog",
 								new {slug = @Model.Category.UrlSlug })">
 									@Model.Category.Name
 							</a>
 						</span>
 					</p>
-					<p class="card-text">
+					<p class="card-text text-decoration-none">
 						@Html.Raw(Model.ShortDescription)
 					</p>
 					<div class="tag-list">

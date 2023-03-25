@@ -30,7 +30,11 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index(PostFilterModel model)
+        public async Task<IActionResult> Index(
+            PostFilterModel model,
+            [FromQuery(Name = "k")] string keyword = null,
+            [FromQuery(Name = "p")] int pageNumber = 1,
+            [FromQuery(Name = "ps")] int pageSize = 10)
         {
             _logger.LogInformation("Tạo điều kiện truy vấn");
 
@@ -40,11 +44,11 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             _logger.LogInformation("Lấy danh sách bài viết từ CSDL");
 
             ViewBag.PostsList = await _blogRepository
-                .GetPagedPostsAsync(postQuery, 1, 10);
+                .GetPagedPostsAsync(postQuery, pageNumber, pageSize);
 
             _logger.LogInformation("Chuẩn bị dữ liệu cho ViewModel");
 
-            await PopulatePostFilterModelAsync(model);
+            //await PopulatePostFilterModelAsync(model);
 
             return View(model);
         }
@@ -71,7 +75,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Edit(
-            IValidator<PostEditModel> postValidator,
+            [FromServices]IValidator<PostEditModel> postValidator,
             PostEditModel model)
         {
             var validationResult = await postValidator.ValidateAsync(model);
@@ -139,6 +143,22 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
                 : Json(true);
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> TogglePublished(int postId)
+        {
+          
+            var post= await _blogRepository.GetPostByIdAsync(postId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            await _blogRepository.TogglePublishedFlagAsync(postId);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
         private async Task PopulatePostFilterModelAsync(PostFilterModel model)
         {
             var authors = await _blogRepository.GetAuthorsAsync();
@@ -176,10 +196,11 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 		}
 
 
+        
 
 
 
 
 
-	}
+    }
 }
