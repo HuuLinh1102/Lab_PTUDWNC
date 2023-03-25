@@ -27,11 +27,11 @@
         {
             <tr>
                 <td>
-                    <a asp-area="Admin"
+                    <a  asp-area="Admin"
                         asp-controller="Posts"
                         asp-action="Edit"
                         asp-route-id="@post.Id" 
-                        class="text-bold">
+                        class="text-bold text-decoration-none">
                          @post.Title
                     </a>
                     <p class="text-muted"> 
@@ -45,12 +45,19 @@
                     @post.Category.Name
                 </td>
                 <td>
-                    @(post.Published ? "Có" : "Không")
+                    <button onclick="@Url.Action("TogglePublished", "Posts"))" 
+                                     class="btn btn-sm btn-outline-primary">
+                                     @((post.Published ? "Có" : "Không"))
+                    </button>
+                      
                 </td>
             </tr> 
         }
         </tbody>
-    </table>
+   </table>
+
+   <partial name="_Pager" model="postsList"/>
+    
 }
 else
 {
@@ -58,4 +65,23 @@ else
         Không tìm thấy bài viết nào    
     </h1>
 }
+
+@section scripts
+{
+    <script>
+        function togglePublished(postId) {
+            const button = document.querySelector(`button[data-post-id="${postId}"]`);
+            const isPublished = button.classList.contains("btn-success");
+            button.classList.toggle("btn-success");
+            button.classList.toggle("btn-secondary");
+            button.textContent = isPublished ? "Không" : "Có";
+
+        }
+    </script>
+}
+
+
+
+
+
 

@@ -1,8 +1,130 @@
-﻿
-@{
+﻿@{
 	ViewData["PageTitle"] = "Liên hệ";
 }
 
-<h1>
-	Đây là trang liên hệ
-</h1>
+<!--Section: Contact v.2-->
+<section class="mb-4 p-4">
+
+	<!--Section heading-->
+	<h2 class="h1-responsive font-weight-bold text-center my-4">Liên hệ</h2>
+	<!--Section description-->
+	<p class="text-center w-responsive mx-auto mb-5">
+		Nếu bạn có bất kỳ câu hỏi, hay góp ý hãy để lại ý kiến!
+	</p>
+	<form id="contact-form"
+		  name="contact-form"
+		  action="mail.php" method="POST">
+
+		<!--Grid row-->
+		<div class="row">
+
+			<!--Grid column-->
+			<div class="col-md-6">
+				<div class="md-form mb-0">
+					<label for="name" class="">Tên</label>
+					<input type="text" id="name"
+						   name="name" class="form-control">
+				</div>
+			</div>
+			<!--Grid column-->
+			<!--Grid column-->
+			<div class="col-md-6">
+				<div class="md-form mb-0">
+					<label for="email" class="">Email</label>
+					<input type="text" id="email"
+						   name="email" class="form-control">
+				</div>
+			</div>
+			<!--Grid column-->
+
+		</div>
+		<!--Grid row-->
+		<!--Grid row-->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="md-form mb-0">
+					<label for="subject" class="">Chủ đề</label>
+					<input type="text" id="subject"
+						   name="subject" class="form-control">
+				</div>
+			</div>
+		</div>
+		<!--Grid row-->
+		<!--Grid row-->
+		<div class="row">
+
+			<!--Grid column-->
+			<div class="col-md-12">
+
+				<div class="md-form">
+					<label for="message">Nội dung</label>
+					<textarea type="text" id="message"
+							  name="message" rows="2"
+							  class="form-control md-textarea"></textarea>
+				</div>
+
+			</div>
+		</div>
+		<!--Grid row-->
+
+	</form>
+
+	<div class="text-center text-md-left m-2">
+		<a class="btn btn-primary"
+		   onclick="document.getElementById('contact-form').submit();">
+			Send
+		</a>
+	</div>
+	<div class="status"></div>
+
+	<div class="row m-md-5 ">
+
+		<!--Grid column-->
+		<div class="col-md-5">
+			<h5>Thông tin liên hệ:</h5>
+			<ul class="list-unstyled mb-0">
+				<li>
+					<p>
+						<i class="fa fa-map-marker"></i>
+						1 Phù Đổng Thiên Vương, Đà Lạt, Việt Nam
+					</p>
+				</li>
+
+				<li>
+					<p>
+						<i class="fa fa-phone"></i>
+						0969 999 999
+					</p>
+				</li>
+
+				<li>
+					<p>
+						<i class="fa fa-envelope"></i>
+						blog102@gmail.com
+					</p>
+				</li>
+			</ul>
+		</div>
+		<!--Grid column-->
+		<!--Grid column-->
+
+		<div class="col-md-7 mb-md-0 mb-5">
+
+			<h5>
+				Bản đồ:
+			</h5>
+			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15612.819078408793!2d108.43947425!3d11.96032!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317112d959f88991%3A0x9c66baf1767356fa!2zVHLGsOG7nW5nIMSQ4bqhaSBI4buNYyDEkMOgIEzhuqF0!5e0!3m2!1svi!2s!4v1679619855802!5m2!1svi!2s"
+					width="600"
+					height="450"
+					style="border:0;"
+					allowfullscreen=""
+					loading="lazy"
+					referrerpolicy="no-referrer-when-downgrade">
+			</iframe>
+
+		</div>
+		<!--Grid column-->
+	</div>
+
+</section>
+<!--Section: Contact v.2-->

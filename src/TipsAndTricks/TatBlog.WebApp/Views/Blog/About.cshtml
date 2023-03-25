@@ -3,6 +3,26 @@
 	ViewData["PageTitle"] = "Giới thiệu";
 }
 
-<h1>
-	Đây là trang giới thiệu
-</h1>
+@{
+    ViewData["Title"] = "About";
+    
+}
+
+<div class="container">
+    <h1 class="mt-5">Giới thiệu</h1>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <p>Chúng tôi là một nhóm các blogger thích viết về nhiều chủ đề khác nhau, bao gồm ẩm thực, công nghệ, giải trí, v.v.</p>
+            <p>Mục tiêu của chúng tôi là cung cấp cho bạn nội dung hữu ích, giải trí và nhiều thông tin về các chủ đề mà chúng tôi quan tâm. Chúng tôi hy vọng mang đến cho bạn trải nghiệm viết blog tốt nhất có thể.</p>
+            <p>Nếu bạn có bất kỳ nhận xét hoặc câu hỏi nào về chúng tôi và trang web này, vui lòng liên hệ với chúng tôi qua trang liên hệ hoặc các kênh truyền thông xã hội của chúng tôi.</p>
+            <p>Cảm ơn bạn đã ghé thăm trang giới thiệu của chúng tôi! Chúng tôi hy vọng bạn thích đọc blog này.</p>
+        </div>
+        <div class="col-md-6 ">
+            @*<img src="/Images/about.jpg" alt="About Us" class="rounded-circle w-100 h-100">*@
+            <img src="/Images/about.jpg" alt="About Us" style="width: 350px; height:350px; border-radius: 50%; margin-left: 20px">
+
+        </div>
+    </div>
+</div>
+

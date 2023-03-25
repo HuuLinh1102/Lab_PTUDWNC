@@ -10,7 +10,7 @@ namespace TatBlog.WebApp.Mapsters
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<Post, PostItem>()
-                .Map(dest => dest.Category.Name, src => src.Category.Name)
+                .Map(dest => dest.Category.Name , src => src.Category.Name)
                 .Map(dest => dest.Tags, src => src.Tags.Select(x => x.Name));
 
             config.NewConfig<PostFilterModel, PostQuery>()

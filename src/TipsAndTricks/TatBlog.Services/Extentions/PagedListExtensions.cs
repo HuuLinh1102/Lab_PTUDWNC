@@ -47,7 +47,13 @@ namespace TatBlog.Services.Extentions
             pagingParams.PageSize,
             totalCount);
         }
-        public static async Task<IPagedList<T>> ToPagedListAsync<T>(this IQueryable<T> source,int pageNumber = 1,int pageSize = 10, string sortColumn = "Id",string sortOrder = "DESC", CancellationToken cancellationToken = default)
+        public static async Task<IPagedList<T>> ToPagedListAsync<T>(
+            this IQueryable<T> source,
+            int pageNumber = 1,
+            int pageSize = 10, 
+            string sortColumn = "Id",
+            string sortOrder = "DESC", 
+            CancellationToken cancellationToken = default)
         {
             var totalCount = await source.CountAsync(cancellationToken);
             var items = await source

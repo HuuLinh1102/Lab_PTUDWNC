@@ -1,0 +1,62 @@
+﻿@model IPagedList<Post>
+
+@{
+	var postQuery = (ViewBag.PostQuery as PostQuery) ?? new PostQuery();
+	var actionName = "Index";
+	var slug = "";
+
+
+}
+
+@if (ViewBag.PostsList.PageCount > 1)
+{
+	<div class="text-center my-4">
+		@if (ViewBag.PostsList.HasPreviousPage)
+		{
+			<a asp-area="Admin"
+	   asp-controller="Posts"
+	   asp-action="@actionName"
+	   asp-route-slug="@slug"
+	   asp-route-k="@postQuery.Keyword"
+	   asp-route-p="@(ViewBag.PostsList.PageNumber - 1)"
+	   asp-route-ps="@ViewBag.PostsList.PageSize"
+	   class="btn btn-info">
+				<i class="fa fa-arrow-left"></i>
+				Trang trước
+			</a>
+		}
+		else
+		{
+			<button type="button"
+			class="btn btn-outline-secondary"
+			disabled>
+				<i class="fa fa-arrow-left"></i>
+				Trang trước
+			</button>
+		}
+
+		@if (ViewBag.PostsList.HasNextPage)
+		{
+			<a asp-area="Admin"
+	   asp-controller="Posts"
+	   asp-action="@actionName"
+	   asp-route-slug="@slug"
+	   asp-route-k="@postQuery.Keyword"
+	   asp-route-p="@(ViewBag.PostsList.PageNumber + 1)"
+	   asp-route-ps="@ViewBag.PostsList.PageSize"
+	   class="btn btn-info">
+				Trang sau
+				<i class="fa fa-arrow-right"></i>
+			</a>
+		}
+		else
+		{
+			<button type="button"
+			class="btn btn-outline-secondary"
+			disabled>
+				Trang sau
+				<i class="fa fa-arrow-right"></i>
+			</button>
+		}
+	</div>
+}

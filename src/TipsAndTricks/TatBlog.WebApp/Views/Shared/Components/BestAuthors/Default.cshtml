@@ -1,0 +1,23 @@
+﻿@model IList<Author>
+
+<div class="mb-4">
+	<h3 class="text-success mb-2">
+		Tác giả nhiều bài viết
+	</h3>
+
+	<ul class="list-group">
+		@foreach (var item in Model)
+		{
+			<li class="list-group-item">
+				<a class=" text-decoration-none" 
+					asp-area="Blog"
+					asp-controller="Blog"
+					asp-action="PopularAuthors"
+					asp-route-slug="@item.UrlSlug">
+					@item.FullName
+					<span>(@item.Posts.Count())</span>
+				</a>
+			</li>
+		}
+	</ul>
+</div>
