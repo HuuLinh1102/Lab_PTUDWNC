@@ -16,12 +16,36 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Authors/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXV0aG9yc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Authors/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXV0aG9yc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Authors/_Pager.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXV0aG9yc1xfUGFnZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Authors/_PostFilterPane.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXV0aG9yc1xfUG9zdEZpbHRlclBhbmUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Categories/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ2F0ZWdvcmllc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Categories/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ2F0ZWdvcmllc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Categories/_CategoryFilterPane.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ2F0ZWdvcmllc1xfQ2F0ZWdvcnlGaWx0ZXJQYW5lLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Categories/_Pager.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQ2F0ZWdvcmllc1xfUGFnZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Comments/Index.cshtml]
@@ -60,8 +84,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3Vic2NyaWJlc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Tags/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGFnc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Tags/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGFnc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Tags/_Pager.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGFnc1xfUGFnZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/Tags/_TagFilterPane.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVGFnc1xfVGFnRmlsdGVyUGFuZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Areas/Admin/Views/_ViewImports.cshtml]
@@ -104,6 +140,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xUYWcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Views/Blog/_NewsletterForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xfTmV3c2xldHRlckZvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Views/Blog/_Pager.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xfUGFnZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -114,6 +154,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Views/Blog/_TagList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvZ1xfVGFnTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Views/Shared/Components/Archives/Default.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXENvbXBvbmVudHNcQXJjaGl2ZXNcRGVmYXVsdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/taili/Downloads/2015719-Lab02-Practice/2015719-Lab03-Homework/2015719-Lab03-Practice/TipsAndTricks/TatBlog.WebApp/Views/Shared/Components/BestAuthors/Default.cshtml]

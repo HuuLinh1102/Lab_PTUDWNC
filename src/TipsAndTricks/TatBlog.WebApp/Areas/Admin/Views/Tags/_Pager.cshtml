@@ -1,0 +1,60 @@
+﻿@model IPagedList<Tag>
+
+@{
+	var tagQuery = (ViewBag.TagQuery as CategoryQuery) ?? new CategoryQuery();
+	var actionName = "Index";
+	var slug = "";
+
+
+}
+
+@if (ViewBag.TagsList.PageCount > 1)
+{
+	<div class="text-center my-4">
+		@if (ViewBag.TagsList.HasPreviousPage)
+		{
+			<a asp-area="Admin"
+	   asp-controller="Tags"
+	   asp-action="@actionName"
+	   asp-route-k="@tagQuery.Keyword"
+	   asp-route-p="@(ViewBag.TagsList.PageNumber - 1)"
+	   asp-route-ps="@ViewBag.TagsList.PageSize"
+	   class="btn btn-info">
+				<i class="fa fa-arrow-left"></i>
+				Trang trước
+			</a>
+		}
+		else
+		{
+			<button type="button"
+			class="btn btn-outline-secondary"
+			disabled>
+				<i class="fa fa-arrow-left"></i>
+				Trang trước
+			</button>
+		}
+
+		@if (ViewBag.TagsList.HasNextPage)
+		{
+			<a asp-area="Admin"
+	   asp-controller="Tags"
+	   asp-action="@actionName"
+	   asp-route-k="@tagQuery.Keyword"
+	   asp-route-p="@(ViewBag.TagsList.PageNumber + 1)"
+	   asp-route-ps="@ViewBag.TagsList.PageSize"
+	   class="btn btn-info">
+				Trang sau
+				<i class="fa fa-arrow-right"></i>
+			</a>
+		}
+		else
+		{
+			<button type="button"
+			class="btn btn-outline-secondary"
+			disabled>
+				Trang sau
+				<i class="fa fa-arrow-right"></i>
+			</button>
+		}
+	</div>
+}

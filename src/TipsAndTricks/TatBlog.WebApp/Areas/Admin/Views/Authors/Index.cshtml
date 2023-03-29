@@ -1,7 +1,87 @@
-﻿@{
-	ViewData["PageTitile"] = "Tác giả";
+﻿@model TatBlog.WebApp.Areas.Admin.Models.AuthorFilterModel
+@{
+	ViewData["PageTitile"] = "Danh sách tác giả";
+	var authorList = ViewBag.AuthorsList as IPagedList<Author>;
 }
 
 <h1>
-	Danh sách tác giả
+	Danh sách bài viết
 </h1>
+
+<partial name="_PostFilterPane" model="Model" />
+
+@if (authorList != null && authorList.Count > 0)
+{
+	<table class="table table-responsive table-striped">
+		<thead>
+			<tr>
+				<th>Tác giả</th>
+				<th>Email</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			@foreach (var author in authorList)
+			{
+				<tr>
+					<td>
+						<a asp-area="Admin"
+				   asp-controller="Authors"
+				   asp-action="Edit"
+				   asp-route-id="@author.Id"
+				   class="text-bold text-decoration-none">
+							@author.FullName
+						</a>
+						<p class="text-muted">
+							@author.UrlSlug
+						</p>
+					</td>
+					<td>
+						@author.Email
+					</td>
+					<td>
+						<button type="button"
+						class="btn btn-danger delete-author"
+						data-id="@author.Id">
+							Xóa
+						</button>
+
+					</td>
+
+				</tr>
+
+
+			}
+		</tbody>
+	</table>
+
+	<partial name="_Pager" model="authorList" />
+
+}
+else
+{
+	<h1 class="text-danger">
+		Không tìm thấy tác giả nào
+	</h1>
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+	$(function () {
+		$('.delete-author').click(function () {
+			var authorId = $(this).data('id');
+			if (confirm('Bạn có thực sự muốn xóa tác giả này không?')) {
+				var url = '@Url.Action("Delete", "Authors")';
+				$.post(url, { id: authorId }, function () {
+					location.reload();
+				});
+			}
+		});
+	});
+</script>
+
+
+
+
+

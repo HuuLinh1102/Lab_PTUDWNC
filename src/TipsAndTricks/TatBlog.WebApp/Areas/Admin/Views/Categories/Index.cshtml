@@ -1,7 +1,101 @@
-﻿@{
-	ViewData["PageTitile"] = "Danh mục";
+﻿@model TatBlog.WebApp.Areas.Admin.Models.CategoryFilterModel
+@{
+	ViewData["PageTitile"] = "Danh sách chủ đề";
+	var categoriesList = ViewBag.CategoriesList as IPagedList<Category>;
 }
 
 <h1>
 	Danh sách chủ đề
 </h1>
+
+<partial name="_CategoryFilterPane" model="Model" />
+
+@if (categoriesList != null && categoriesList.Count > 0)
+{
+	<table class="table table-responsive table-striped">
+		<thead>
+			<tr>
+				<th>Chủ đề</th>
+				<th>Hiển thị trên menu</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			@foreach (var category in categoriesList)
+			{
+				<tr>
+					<td>
+						<a asp-area="Admin"
+				   asp-controller="Categories"
+				   asp-action="Edit"
+				   asp-route-id="@category.Id"
+				   class="text-bold text-decoration-none">
+							@category.Name
+						</a>
+						<p class="text-muted">
+							@category.Description
+						</p>
+					</td>
+
+					<td>
+						<button class="btn @(category.ShowOnMenu ? "btn-success" : "btn-danger") toggle-showonmenu"
+						data-id="@category.Id">
+							@(category.ShowOnMenu ? "Có" : "Không")
+						</button>
+					</td>
+					<td>
+						<button type="button"
+						class="btn btn-danger delete-category"
+						data-id="@category.Id">
+							Xóa
+						</button>
+
+					</td>
+
+				</tr>
+
+
+			}
+		</tbody>
+	</table>
+
+	<partial name="_Pager" model="categoriesList" />
+
+}
+else
+{
+	<h1 class="text-danger">
+		Không tìm thấy chủ đề nào
+	</h1>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+	$(function () {
+		$('.delete-category').click(function () {
+			var categoryId = $(this).data('id');
+			if (confirm('Bạn có thực sự muốn xóa chủ đề này không?')) {
+				var url = '@Url.Action("Delete", "Categories")';
+				$.post(url, { id: categoryId }, function () {
+					location.reload();
+				});
+			}
+		});
+	});
+</script>
+
+<script>
+	$(function () {
+		$('.toggle-showonmenu').click(function () {
+			var categoryId = $(this).data('id');
+			var url = '@Url.Action("ShowOnMenu", "Categories")';
+			$.post(url, { id: categoryId }, function () {
+				location.reload();
+			});
+		});
+	});
+</script>
+
+
+

@@ -29,7 +29,8 @@ namespace TatBlog.Services.Blogs
             string slug,
             CancellationToken cancellationToken = default);
 
-        Task<Author> GetAuthorByIdAsync(int authorId);
+        Task<Author> GetAuthorByIdAsync(int authorId, 
+            CancellationToken cancellationToken = default);
 
         Task<IList<AuthorItem>> GetAuthorsAsync(
             CancellationToken cancellationToken = default);
@@ -83,23 +84,45 @@ namespace TatBlog.Services.Blogs
 		Task<IList<TagItem>> GetTagsAsync(
             CancellationToken cancellationToken = default);
 
-        // Xóa một thẻ,danh mục theo mã cho trước.
-        Task DeleteByIdAsync<T>(int id) where T : class, new();
+        Task<bool> CreateOrUpdateTagAsync(
+        Tag tag, CancellationToken cancellationToken = default);
+
+		// Xóa một thẻ,danh mục theo mã cho trước.
+		Task DeleteByIdAsync<T>(int id) where T : class, new();
 
         // Thêm hoặc cập nhật một chuyên mục/chủ đề.
         Task<Category> CreateOrUpdateCategoryAsync(
         Category category, CancellationToken cancellationToken = default);
 
+
+        Task<Author> CreateOrUpdateAuthorAsync(
+        Author author, CancellationToken cancellationToken = default);
+
 		// Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
-		Task<bool> IsSlugExists(string slug);
+		Task<bool> IsCategorySlugExistedAsync(
+        int categoryId, string categorySlug,
+        CancellationToken cancellationToken = default);
+
+        Task<bool> IsAuthorSlugExistedAsync(
+        int authorId, string authorSlug,
+        CancellationToken cancellationToken = default);
+
+        Task<bool> IsTagSlugExistedAsync(
+        int tagId, string tagSlug,
+        CancellationToken cancellationToken = default);
+
+
+		Task<bool> DeleteCategoryAsync(
+        int categoryId, CancellationToken cancellationToken = default);
 
         //Lấy và phân trang danh sách chuyên mục
         Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(
-            IPagingParams pagingParams,
+            int pageNumber = 1,
+            int pageSize = 10,
             CancellationToken cancellationToken = default);
 
-        // Đếm số lượng bài viết trong N tháng gần nhất
-        Task<IList<MonthlyPostCount>> GetMonthlyPostCountsAsync(int months);
+		// Đếm số lượng bài viết trong N tháng gần nhất
+		Task<IList<MonthlyPostCount>> GetMonthlyPostCountsAsync(int months);
 
         // Thêm hay cập nhật một bài viết. 
         Task<Post> CreateOrUpdatePostAsync(
@@ -112,15 +135,37 @@ namespace TatBlog.Services.Blogs
         Task<bool> TogglePublishedFlagAsync(
         int postId, CancellationToken cancellationToken = default);
 
-        // Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
-        Task<IPagedList<Post>> GetPagedPostsAsync(
+        Task<bool> ToggleShowOnMenuFlagAsync(
+        int categoryId, CancellationToken cancellationToken = default);
+
+		// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
+		Task<IPagedList<Post>> GetPagedPostsAsync(
             PostQuery condition,
             int pageNumber = 1,
             int pageSize = 10,
             CancellationToken cancellationToken = default);
 
-        // t.
-        Task<IPagedList<T>> GetPagedPostsAsync<T>(
+        Task<IPagedList<Category>> GetPagedCategoriesAsync(
+        CategoryQuery condition,
+        int pageNumber = 1,
+        int pageSize = 10,
+		CancellationToken cancellationToken = default);
+
+
+        Task<IPagedList<Author>> GetPagedAuthorsAsync(
+        AuthorQuery condition,
+        int pageNumber = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default);
+
+        Task<IPagedList<Tag>> GetPagedTagsAsync(
+        CategoryQuery condition,
+        int pageNumber = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default);
+
+		// t.
+		Task<IPagedList<T>> GetPagedPostsAsync<T>(
             PostQuery condition,
             IPagingParams pagingParams,
             Func<IQueryable<Post>, IQueryable<T>> mapper);
@@ -132,6 +177,9 @@ namespace TatBlog.Services.Blogs
 
         Task<List<Post>> GetRelatedPostsAsync(
             int postId, int categoryId);
+
+        Task<IList<Post>> GetPostsByMonthAsync(
+            int year, int month);
 
 	}
 }

@@ -19,8 +19,8 @@ namespace TatBlog.Core.DTO
 		public int Year { get; set; }
         public int Month { get; set; }
         public int Day { get; set; }
-        public bool? PublishedOnly { get; set; }
-        public bool? NotPublished { get; set; }
+        public bool PublishedOnly { get; set; } = true;
+		public bool NotPublished { get; set; } = false;
         public string Keyword { get; set; }
     }
 }

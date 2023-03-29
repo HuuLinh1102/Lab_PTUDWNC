@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using System.Runtime.CompilerServices;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
@@ -161,19 +159,24 @@ namespace TatBlog.WebApp.Controllers
         }
 
         public async Task<IActionResult> Archives(
-            [FromRoute(Name = "year")] int year = 2020,
-            [FromRoute(Name = "month")] int month = 2)
-        {
-            var postQuery = new PostQuery()
-            {
-                Month = month,
-                Year = year,
-            };
-            ViewBag.PostQuery = postQuery;
-            var posts = await _blogRepository.GetPagedPostsAsync(postQuery,1,10);
-            return View("Archives", posts);
+            [FromRoute] int year,
+            [FromRoute] int month,
+            int pageNumber = 1,
+			int pageSize = 10)
+		{
 
-        }
+			var postQuery = new PostQuery()
+			{
+				PublishedOnly = true,
+                Year = year,
+                Month = month
+			};
+
+			var posts = await _blogRepository.GetPagedPostsAsync(postQuery, pageNumber, pageSize);
+			ViewBag.Tag = posts;
+			return View("Index", posts);
+
+		}
 
 		public async Task<IActionResult> PopularPosts(
 			string slug,
@@ -220,6 +223,7 @@ namespace TatBlog.WebApp.Controllers
 			ViewBag.Tag = posts;
 			return View("Index",posts);
 		}
+
 
 		public IActionResult About()
             => View();

@@ -12,74 +12,96 @@
 
 @if (postsList != null && postsList.Count > 0)
 {
-   <table class="table table-responsive table-striped">
-        <thead>
-        <tr>
-            <th>Tiêu đề</th>
-            <th>Tác giả</th>
- 	        <th>Chủ đề</th>
-            <th>Xuất bản</th>
-        </tr>
-        </thead>
-        <tbody>
+	<table class="table table-responsive table-striped">
+		<thead>
+			<tr>
+				<th>Tiêu đề</th>
+				<th>Tác giả</th>
+				<th>Chủ đề</th>
+				<th>Xuất bản</th>
+			</tr>
+		</thead>
+		<tbody>
 
-        @foreach (var post in postsList)
-        {
-            <tr>
-                <td>
-                    <a  asp-area="Admin"
-                        asp-controller="Posts"
-                        asp-action="Edit"
-                        asp-route-id="@post.Id" 
-                        class="text-bold text-decoration-none">
-                         @post.Title
-                    </a>
-                    <p class="text-muted"> 
-                         @post.ShortDescription
-                    </p>
-                </td>
-                <td>
-                    @post.Author.FullName
-                </td>
-                <td>
-                    @post.Category.Name
-                </td>
-                <td>
-                    <button onclick="@Url.Action("TogglePublished", "Posts"))" 
-                                     class="btn btn-sm btn-outline-primary">
-                                     @((post.Published ? "Có" : "Không"))
-                    </button>
-                      
-                </td>
-            </tr> 
-        }
-        </tbody>
-   </table>
+			@foreach (var post in postsList)
+			{
+				<tr>
+					<td>
+						<a asp-area="Admin"
+				   asp-controller="Posts"
+				   asp-action="Edit"
+				   asp-route-id="@post.Id"
+				   class="text-bold text-decoration-none">
+							@post.Title
+						</a>
+						<p class="text-muted">
+							@post.ShortDescription
+						</p>
+					</td>
+					<td>
+						@post.Author.FullName
+					</td>
+					<td>
+						@post.Category.Name
+					</td>
+					<td>
+						<button class="btn @(post.Published ? "btn-success" : "btn-danger") toggle-publish"
+						data-id="@post.Id">
+							@(post.Published ? "Có" : "Không")
+						</button>
+					</td>
+					<td>
+						<button type="button"
+						class="btn btn-danger delete-post"
+						data-id="@post.Id">
+							Xóa
+						</button>
 
-   <partial name="_Pager" model="postsList"/>
-    
+					</td>
+
+				</tr>
+
+
+			}
+		</tbody>
+	</table>
+
+	<partial name="_Pager" model="postsList" />
+
 }
 else
 {
-    <h1 class="text-danger">
-        Không tìm thấy bài viết nào    
-    </h1>
+	<h1 class="text-danger">
+		Không tìm thấy bài viết nào
+	</h1>
 }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-@section scripts
-{
-    <script>
-        function togglePublished(postId) {
-            const button = document.querySelector(`button[data-post-id="${postId}"]`);
-            const isPublished = button.classList.contains("btn-success");
-            button.classList.toggle("btn-success");
-            button.classList.toggle("btn-secondary");
-            button.textContent = isPublished ? "Không" : "Có";
+<script>
+	$(function () {
+		$('.toggle-publish').click(function () {
+			var postId = $(this).data('id');
+			var url = '@Url.Action("Published", "Posts")';
+			$.post(url, { id: postId }, function () {
+				location.reload();
+			});
+		});
+	});
+</script>
 
-        }
-    </script>
-}
-
+<script>
+	$(function () {
+		$('.delete-post').click(function () {
+			var postId = $(this).data('id');
+			if (confirm('Bạn có thực sự muốn xóa bài viết này không?')) {
+				var url = '@Url.Action("Delete", "Posts")';
+				$.post(url, { id: postId }, function () {
+					location.reload();
+				});
+			}
+		});
+	});
+</script>
 
 
 

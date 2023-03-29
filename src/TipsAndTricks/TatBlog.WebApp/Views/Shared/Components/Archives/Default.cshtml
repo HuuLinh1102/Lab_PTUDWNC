@@ -1,0 +1,27 @@
+﻿@using System.Globalization;
+@model IList<MonthlyPostCount>
+
+<div class="mb-4">
+	<h3 class="text-success mb-2">
+		Các tháng gần đây
+	</h3>
+
+	<p>
+		@foreach (var item in Model)
+		{
+			<a class="text-decoration-none"
+		   asp-area="Blog"
+		   asp-controller="Blog"
+		   asp-action="Archives"
+		   asp-route-year="@item.Year"
+		   asp-route-month="@item.Month">
+				@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.Month) @item.Year (@item.Count)
+			</a>
+
+			if (!item.Equals(Model.Last()))
+			{
+				<span>,</span>
+			}
+		}
+	</p>
+</div>

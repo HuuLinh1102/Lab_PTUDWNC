@@ -1,13 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "8uss+mjKPWbE7oRhdkQDHp0R/AC7TBQocqtd07UUJDIq5hyIE8I7pzdy/YWCdNK1k2GdDsHvLW9sBUOi0jGR+Q==",
+  "dgSpecHash": "PAzKw9jyIJ7E9Hz+Vqid/wbYQnHJRcTdELB5h9TwBwEU49hTT+d8X+CldR7amfL5z9oa+yXuJjIcVEYQFBvokw==",
   "success": true,
   "projectFilePath": "C:\\Users\\taili\\Downloads\\2015719-Lab02-Practice\\2015719-Lab03-Homework\\2015719-Lab03-Practice\\TipsAndTricks\\TatBlog.Services\\TatBlog.Services.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\taili\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\taili\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\taili\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\taili\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
-    "C:\\Users\\taili\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\taili\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\taili\\.nuget\\packages\\microsoft.data.sqlclient\\5.0.1\\microsoft.data.sqlclient.5.0.1.nupkg.sha512",
     "C:\\Users\\taili\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.0.1\\microsoft.data.sqlclient.sni.runtime.5.0.1.nupkg.sha512",
     "C:\\Users\\taili\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.3\\microsoft.entityframeworkcore.7.0.3.nupkg.sha512",

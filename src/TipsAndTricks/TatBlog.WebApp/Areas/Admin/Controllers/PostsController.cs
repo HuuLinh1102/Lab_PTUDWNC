@@ -1,8 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
@@ -32,12 +35,10 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(
             PostFilterModel model,
-            [FromQuery(Name = "k")] string keyword = null,
             [FromQuery(Name = "p")] int pageNumber = 1,
             [FromQuery(Name = "ps")] int pageSize = 10)
         {
             _logger.LogInformation("Tạo điều kiện truy vấn");
-
 
             var postQuery = _mapper.Map<PostQuery>(model);
 
@@ -48,7 +49,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             _logger.LogInformation("Chuẩn bị dữ liệu cho ViewModel");
 
-            //await PopulatePostFilterModelAsync(model);
+            await PopulatePostFilterModelAsync(model);
 
             return View(model);
         }
@@ -144,22 +145,37 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> TogglePublished(int postId)
+		[HttpPost]
+		public async Task<IActionResult> Published(int id)
+		{
+			var post = await _blogRepository.GetPostByIdAsync(id);
+			if (post == null)
+			{
+				return NotFound();
+			}
+
+			await _blogRepository.TogglePublishedFlagAsync(id);
+
+			return RedirectToAction(nameof(Index));
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Delete(int id)
         {
-          
-            var post= await _blogRepository.GetPostByIdAsync(postId);
-            if (post == null)
+			var post = await _blogRepository.GetPostByIdAsync(id);
+			if (post == null)
             {
-                return NotFound();
+				return NotFound();
             }
-            await _blogRepository.TogglePublishedFlagAsync(postId);
 
-            return RedirectToAction(nameof(Index));
-        }
+			await _blogRepository.DeleteByIdAsync<Post>(id);
+
+			return RedirectToAction(nameof(Index));
+		}
 
 
-        private async Task PopulatePostFilterModelAsync(PostFilterModel model)
+
+		private async Task PopulatePostFilterModelAsync(PostFilterModel model)
         {
             var authors = await _blogRepository.GetAuthorsAsync();
             var categories = await _blogRepository.GetCategoriesAsync();
