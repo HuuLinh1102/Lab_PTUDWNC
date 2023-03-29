@@ -2441,6 +2441,7 @@
       "TatBlog.Services/1.0.0": {
         "dependencies": {
           "AutoMapper": "12.0.1",
+          "Microsoft.EntityFrameworkCore.Relational": "7.0.4",
           "System.Linq.Dynamic.Core": "1.2.25",
           "TatBlog.Core": "1.0.0",
           "TatBlog.Data": "1.0.0"

@@ -18,18 +18,18 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 	public class AuthorsController : Controller
 	{
 		private readonly ILogger<AuthorsController> _logger;
-		private readonly IBlogRepository _blogRepository;
+		private readonly IAuthorRepository _authorRepository;
 		private readonly IMediaManager _mediaManager;
 		private readonly IMapper _mapper;
 
 		public AuthorsController(
 			ILogger<AuthorsController> logger,
-			IBlogRepository blogRepository,
+			IAuthorRepository blogRepository,
 			IMediaManager mediaManager,
 			IMapper mapper)
 		{
 			_logger = logger;
-			_blogRepository = blogRepository;
+			_authorRepository = blogRepository;
 			_mediaManager = mediaManager;
 			_mapper = mapper;
 		}
@@ -45,8 +45,8 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
 			_logger.LogInformation("Lấy danh sách chủ dề từ CSDL");
 
-			ViewBag.AuthorsList = await _blogRepository
-				.GetPagedAuthorsAsync(authorQuery, pageNumber, pageSize);
+			ViewBag.AuthorsList = await _authorRepository
+				.GetPagedAuthorsQueryAsync(authorQuery, pageNumber, pageSize);
 
 			_logger.LogInformation("Chuẩn bị dữ liệu cho ViewModel");
 
@@ -60,7 +60,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 			// ID = 0 <=> Thêm bài viết
 			// ID > 0 : Đọc dữ liệu của bài viết từ CSDL
 			var author = id > 0
-				? await _blogRepository.GetAuthorByIdAsync(id)
+				? await _authorRepository.GetAuthorByIdAsync(id)
 				: null;
 
 			// Tạo view model từ dữ liệu của bài viết
@@ -85,7 +85,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 			}
 
 			var author = model.Id > 0
-				? await _blogRepository.GetAuthorByIdAsync(model.Id)
+				? await _authorRepository.GetAuthorByIdAsync(model.Id)
 				: null;
 
 			if (author == null)
@@ -116,7 +116,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 				}
 			}
 
-			await _blogRepository.CreateOrUpdateAuthorAsync(author);
+			await _authorRepository.AddOrUpdateAsync(author);
 
 			return RedirectToAction(nameof(Index));
 		}
@@ -125,7 +125,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 		public async Task<IActionResult> VerifyAuthorSlug(
 			int id, string urlSlug)
 		{
-			var slugExisted = await _blogRepository
+			var slugExisted = await _authorRepository
 				.IsAuthorSlugExistedAsync(id, urlSlug);
 
 			return slugExisted
@@ -137,13 +137,13 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{
-			var author = await _blogRepository.GetAuthorByIdAsync(id);
+			var author = await _authorRepository.GetAuthorByIdAsync(id);
 			if (author == null)
 			{
 				return NotFound();
 			}
 
-			await _blogRepository.DeleteByIdAsync<Author>(id);
+			await _authorRepository.DeleteAuthorAsync(id);
 
 			return RedirectToAction(nameof(Index));
 		}
