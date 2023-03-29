@@ -1,7 +1,86 @@
-﻿@{
-	ViewData["PageTitile"] = "Thẻ";
+﻿@model TatBlog.WebApp.Areas.Admin.Models.TagFilterModel
+@{
+	ViewData["PageTitile"] = "Danh sách thẻ";
+	var tagsList = ViewBag.TagsList as IPagedList<Tag>;
 }
 
 <h1>
-	Danh sách các thẻ
+	Danh sách thẻ
 </h1>
+
+<partial name="_TagFilterPane" model="Model" />
+
+@if (tagsList != null && tagsList.Count > 0)
+{
+	<table class="table table-responsive table-striped">
+		<thead>
+			<tr>
+				<th>Thẻ</th>
+				<th>Mô tả</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			@foreach (var tag in tagsList)
+			{
+				<tr>
+					<td>
+						<a asp-area="Admin"
+				   asp-controller="Tags"
+				   asp-action="Edit"
+				   asp-route-id="@tag.Id"
+				   class="text-bold text-decoration-none">
+							@tag.Name
+						</a>
+						<p class="text-muted">
+							@tag.UrlSlug
+						</p>
+					</td>
+					<td>
+						@tag.Description
+					</td>
+					<td>
+						<button type="button"
+						class="btn btn-danger delete-tag"
+						data-id="@tag.Id">
+							Xóa
+						</button>
+
+					</td>
+
+				</tr>
+
+
+			}
+		</tbody>
+	</table>
+
+	<partial name="_Pager" model="tagsList" />
+
+}
+else
+{
+	<h1 class="text-danger">
+		Không tìm thấy thẻ nào
+	</h1>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+	$(function () {
+		$('.delete-tag').click(function () {
+			var tagId = $(this).data('id');
+			if (confirm('Bạn có thực sự muốn xóa thẻ này không?')) {
+				var url = '@Url.Action("Delete", "Tags")';
+				$.post(url, { id: tagId }, function () {
+					location.reload();
+				});
+			}
+		});
+	});
+</script>
+
+
+
+

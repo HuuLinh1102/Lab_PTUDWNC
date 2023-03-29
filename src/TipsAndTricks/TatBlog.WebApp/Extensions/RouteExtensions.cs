@@ -33,6 +33,12 @@
 				pattern: "admin/{controller=Dashboard}/{action=Index}/{id?}",
 				defaults: new { area = "Admin" });
 
+
+			endpoints.MapControllerRoute(
+				name: "posts-by-month",
+				pattern: "blog/archives/{year:int}/{month:int}",
+				defaults: new { controller = "Blog", action = "Archives" });
+
 			endpoints.MapControllerRoute(
 				name: "default",
 				pattern: "{controller=Blog}/{action=Index}/{id?}");

@@ -287,3 +287,10 @@ C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-L
 C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\obj\Debug\net7.0\TatBlog.WebApp.pdb
 C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\obj\Debug\net7.0\TatBlog.WebApp.genruntimeconfig.cache
 C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\obj\Debug\net7.0\ref\TatBlog.WebApp.dll
+C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
+C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\bin\Debug\net7.0\Mono.TextTemplating.dll
+C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\bin\Debug\net7.0\System.CodeDom.dll
+C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\bin\Debug\net7.0\FluentEmail.Core.dll
+C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WebApp\bin\Debug\net7.0\FluentEmail.Smtp.dll

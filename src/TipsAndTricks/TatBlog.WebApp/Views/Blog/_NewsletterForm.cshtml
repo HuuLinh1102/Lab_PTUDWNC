@@ -1,0 +1,19 @@
+﻿@using (Html.BeginForm("Subscribe", "Newsletter", FormMethod.Post))
+{
+	<div class="form-group">
+		<h3 class="text-success mb-2">
+			Đăng ký nhận thông báo bài viết mới
+		</h3>
+		<input type="email"
+		   class="form-control"
+		   id="email"
+		   name="email"
+		   placeholder="Nhập địa chỉ email của bạn"
+		   required>
+	</div>
+	<button type="submit"
+		class="btn btn-primary m-2">
+		Đăng ký
+	</button>
+}
+

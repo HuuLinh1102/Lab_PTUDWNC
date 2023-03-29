@@ -73,3 +73,4 @@ C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-L
 C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WinApp\obj\Debug\net7.0\TatBlog.WinApp.pdb
 C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WinApp\obj\Debug\net7.0\TatBlog.WinApp.genruntimeconfig.cache
 C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WinApp\obj\Debug\net7.0\ref\TatBlog.WinApp.dll
+C:\Users\taili\Downloads\2015719-Lab02-Practice\2015719-Lab03-Homework\2015719-Lab03-Practice\TipsAndTricks\TatBlog.WinApp\bin\Debug\net7.0\AutoMapper.dll

@@ -17,8 +17,9 @@
 
 	@await Component.InvokeAsync("BestAuthors")
 
+	@await Component.InvokeAsync("Archives")
+
 	<!-- Đăng ký nhận tin mới -->
-	<h1>
-		Đăng ký nhận tin mới
-	</h1>
+	<partial name="_NewsletterForm" />
+		
 </div>

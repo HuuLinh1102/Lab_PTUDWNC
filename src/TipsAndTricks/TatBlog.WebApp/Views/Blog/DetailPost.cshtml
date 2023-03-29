@@ -34,21 +34,25 @@
 			<div class="card">
 				<div class="card-body">
 					<h5 class="card-title">Bài viết liên quan</h5>
-					@foreach (var post in ViewBag.relatedPosts)
+					@if(ViewBag.relatedPosts != null)
 					{
-						<div class="mb-4">
-							<a class="text-decoration-none"
-								href="@Url.Action("Detail", "Post", new { slug = post.UrlSlug })">
-								<h6>@post.Title</h6>
-							</a>
-							<p class="text-muted">
-								<i class="fas fa-clock me-2"></i>
-								<span class="me-4">@post.PostedDate.ToString("dd/MM/yyyy")</span>
-								<i class="fas fa-folder me-2"></i>
-								<span class="me-4">@post.Category.Name</span>
-							</p>
-						</div>
+						@foreach (var post in ViewBag.relatedPosts)
+						{
+							<div class="mb-4">
+								<a class="text-decoration-none"
+						   href="@Url.Action("Detail", "Post", new { slug = post.UrlSlug })">
+									<h6>@post.Title</h6>
+								</a>
+								<p class="text-muted">
+									<i class="fas fa-clock me-2"></i>
+									<span class="me-4">@post.PostedDate.ToString("dd/MM/yyyy")</span>
+									<i class="fas fa-folder me-2"></i>
+									<span class="me-4">@post.Category.Name</span>
+								</p>
+							</div>
+						}
 					}
+					
 				</div>
 			</div>
 		</div>

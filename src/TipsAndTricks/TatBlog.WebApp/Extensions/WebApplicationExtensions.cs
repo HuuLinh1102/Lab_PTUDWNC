@@ -40,7 +40,20 @@ namespace TatBlog.WebApp.Extensions
 
 			builder.Services.AddScoped<IMediaManager, LocalFileSystemMediaManager>();
 			builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+			builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+			builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
 			builder.Services.AddScoped<IDataSeeder, DataSeeder>();
+
+			builder.Services.AddScoped<EmailService>(serviceProvider =>
+			{
+				var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+				var smtpServer = configuration["smtp.gmail.com"];
+				var smtpPort = configuration.GetValue<int>("587");
+				var smtpUsername = configuration[""];
+				var smtpPassword = configuration[""];
+
+				return new EmailService(smtpServer, smtpPort, smtpUsername, smtpPassword);
+			});
 
 			return builder;
 		}

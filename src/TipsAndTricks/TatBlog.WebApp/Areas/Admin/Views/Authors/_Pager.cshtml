@@ -1,0 +1,62 @@
+﻿@model IPagedList<Author>
+
+@{
+	var authorQuery = (ViewBag.AuthorQuery as AuthorQuery) ?? new AuthorQuery();
+	var actionName = "Index";
+	var slug = "";
+
+
+}
+
+@if (ViewBag.AuthorsList.PageCount > 1)
+{
+	<div class="text-center my-4">
+		@if (ViewBag.AuthorsList.HasPreviousPage)
+		{
+			<a asp-area="Admin"
+	   asp-controller="Authors"
+	   asp-action="@actionName"
+	   asp-route-slug="@slug"
+	   asp-route-k="@authorQuery.Keyword"
+	   asp-route-p="@(ViewBag.AuthorsList.PageNumber - 1)"
+	   asp-route-ps="@ViewBag.AuthorsList.PageSize"
+	   class="btn btn-info">
+				<i class="fa fa-arrow-left"></i>
+				Trang trước
+			</a>
+		}
+		else
+		{
+			<button type="button"
+			class="btn btn-outline-secondary"
+			disabled>
+				<i class="fa fa-arrow-left"></i>
+				Trang trước
+			</button>
+		}
+
+		@if (ViewBag.AuthorsList.HasNextPage)
+		{
+			<a asp-area="Admin"
+	   asp-controller="Authors"
+	   asp-action="@actionName"
+	   asp-route-slug="@slug"
+	   asp-route-k="@authorQuery.Keyword"
+	   asp-route-p="@(ViewBag.AuthorsList.PageNumber + 1)"
+	   asp-route-ps="@ViewBag.AuthorsList.PageSize"
+	   class="btn btn-info">
+				Trang sau
+				<i class="fa fa-arrow-right"></i>
+			</a>
+		}
+		else
+		{
+			<button type="button"
+			class="btn btn-outline-secondary"
+			disabled>
+				Trang sau
+				<i class="fa fa-arrow-right"></i>
+			</button>
+		}
+	</div>
+}

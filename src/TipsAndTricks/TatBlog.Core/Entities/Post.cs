@@ -10,7 +10,11 @@ namespace TatBlog.Core.Entities
 {
     public class Post : IEntity
     {
-        public int Id { get; set; }
+		public Post()
+		{
+			Comments = new List<Comment>();
+		}
+		public int Id { get; set; }
         public string Title { get; set; }
         public string ShortDescription { get; set; }
         public string Description { get; set; }
@@ -29,5 +33,6 @@ namespace TatBlog.Core.Entities
         public Category Category { get; set; }
         public Author Author { get; set; }
         public IList<Tag> Tags { get; set; }
+        public IList<Comment> Comments { get; set; }
     }
 }
