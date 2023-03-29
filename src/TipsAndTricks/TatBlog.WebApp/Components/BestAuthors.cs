@@ -5,17 +5,17 @@ namespace TatBlog.WebApp.Components
 {
 	public class BestAuthors : ViewComponent
 	{
-		private readonly IBlogRepository _blogRepository;
+		private readonly IAuthorRepository _authorRepository;
 
-		public BestAuthors(IBlogRepository blogRepository)
+		public BestAuthors(IAuthorRepository authorRepository)
 		{
-			_blogRepository = blogRepository;
+			_authorRepository = authorRepository;
 		}
 
 		public async Task<IViewComponentResult> InvokeAsync()
 		{
 			// Lấy danh sách tác giả
-			var authors = await _blogRepository.GetPopularAuthorsAsync(4);
+			var authors = await _authorRepository.GetPopularAuthorsAsync(4);
 
 			return View(authors);
 		}

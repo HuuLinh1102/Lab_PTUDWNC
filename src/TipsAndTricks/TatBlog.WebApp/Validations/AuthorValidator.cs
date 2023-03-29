@@ -6,11 +6,11 @@ namespace TatBlog.WebApp.Validations
 {
 	public class AuthorValidator : AbstractValidator<AuthorEditModel>
 	{
-		public readonly IBlogRepository _blogRepository;
+		public readonly IAuthorRepository _authorRepository;
 
-		public AuthorValidator(IBlogRepository blogRepository)
+		public AuthorValidator(IAuthorRepository blogRepository)
 		{
-			_blogRepository = blogRepository;
+			_authorRepository = blogRepository;
 
 			RuleFor(a => a.FullName)
 				.NotEmpty()
@@ -25,7 +25,7 @@ namespace TatBlog.WebApp.Validations
 				.WithMessage("Slug dài tối đa '{MaxLength}' ký tự");
 
 			RuleFor(a => a.UrlSlug)
-				.MustAsync(async (slug, cancellationToken) => !await _blogRepository
+				.MustAsync(async (slug, cancellationToken) => !await _authorRepository
 				.IsAuthorSlugExistedAsync(0, slug, cancellationToken))
 				.WithMessage("Slug '{PropertyValue}' đã được sử dụng");
 
@@ -52,7 +52,7 @@ namespace TatBlog.WebApp.Validations
 			IFormFile imageFile, 
 			CancellationToken cancellationToken)
 		{
-			var author = await _blogRepository.GetAuthorByIdAsync(auhorEditModel.Id);
+			var author = await _authorRepository.GetAuthorByIdAsync(auhorEditModel.Id);
 
 			// Nếu đã có hình ảnh => Không bắt buộc chọn file
 			if (!string.IsNullOrWhiteSpace(author?.ImageUrl))

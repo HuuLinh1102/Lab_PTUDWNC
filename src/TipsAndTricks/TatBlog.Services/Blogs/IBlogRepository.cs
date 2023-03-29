@@ -25,26 +25,11 @@ namespace TatBlog.Services.Blogs
         PostQuery condition,
         CancellationToken cancellationToken = default);
 
-        Task<Author> GetAuthorAsync(
-            string slug,
-            CancellationToken cancellationToken = default);
-
-        Task<Author> GetAuthorByIdAsync(int authorId, 
-            CancellationToken cancellationToken = default);
-
-        Task<IList<AuthorItem>> GetAuthorsAsync(
-            CancellationToken cancellationToken = default);
-
 
         // Tìm Top N bài viết phổ được nhiều người xem nhất
         Task<IList<Post>> GetPopularArticlesAsync(
             int numPosts, 
             CancellationToken cancellationToken = default);
-
-        Task<IList<Author>> GetPopularAuthorsAsync(
-            int numAuthors,
-            CancellationToken cancellationToken = default);
-
 
 		Task<IList<Post>> GetRandomArticlesAsync(
         int numPosts, 
@@ -95,17 +80,13 @@ namespace TatBlog.Services.Blogs
         Category category, CancellationToken cancellationToken = default);
 
 
-        Task<Author> CreateOrUpdateAuthorAsync(
-        Author author, CancellationToken cancellationToken = default);
-
+ 
 		// Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
 		Task<bool> IsCategorySlugExistedAsync(
         int categoryId, string categorySlug,
         CancellationToken cancellationToken = default);
 
-        Task<bool> IsAuthorSlugExistedAsync(
-        int authorId, string authorSlug,
-        CancellationToken cancellationToken = default);
+ 
 
         Task<bool> IsTagSlugExistedAsync(
         int tagId, string tagSlug,
@@ -151,12 +132,6 @@ namespace TatBlog.Services.Blogs
         int pageSize = 10,
 		CancellationToken cancellationToken = default);
 
-
-        Task<IPagedList<Author>> GetPagedAuthorsAsync(
-        AuthorQuery condition,
-        int pageNumber = 1,
-        int pageSize = 10,
-        CancellationToken cancellationToken = default);
 
         Task<IPagedList<Tag>> GetPagedTagsAsync(
         CategoryQuery condition,

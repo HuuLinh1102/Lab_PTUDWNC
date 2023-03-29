@@ -7,7 +7,7 @@ using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
-using TatBlog.Services.Extentions;
+using TatBlog.Services.Extensions;
 
 namespace TatBlog.Services.Blogs
 {
@@ -63,38 +63,7 @@ namespace TatBlog.Services.Blogs
             return await FilterPosts(condition).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<Author> GetAuthorAsync(
-            string slug, 
-            CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Author>()
-                .FirstOrDefaultAsync(a => a.UrlSlug == slug, cancellationToken);
-        }
-
-        public async Task<Author> GetAuthorByIdAsync(int authorId,
-			CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Author>().FindAsync(authorId);
-        }
-
-        public async Task<IList<AuthorItem>> GetAuthorsAsync(
-            CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Author>()
-                .OrderBy(a => a.FullName)
-                .Select(a => new AuthorItem()
-                {
-                    Id = a.Id,
-                    FullName = a.FullName,
-                    Email = a.ToString(),
-                    JoinedDate = a.JoinedDate,
-                    ImageUrl = a.ImageUrl,
-                    UrlSlug = a.UrlSlug,
-                    Notes = a.Notes,
-                    PostCount = a.Posts.Count(p => p.Published)
-                })
-                .ToListAsync(cancellationToken);
-        }
+  
 
         // Tìm Top N bài viết phổ được nhiều người xem nhất 
         public async Task<IList<Post>> GetPopularArticlesAsync(
@@ -109,16 +78,6 @@ namespace TatBlog.Services.Blogs
         }
 
 
-		public async Task<IList<Author>> GetPopularAuthorsAsync(
-            int numAuthors, 
-            CancellationToken cancellationToken = default)
-		{
-			return await _context.Set<Author>()
-				.Include(x => x.Posts)
-				.OrderByDescending(a => a.Posts.Count())
-				.Take(numAuthors)
-				.ToListAsync(cancellationToken);
-		}
 
 
 		public async Task<IList<Post>> GetRandomArticlesAsync(
@@ -382,15 +341,6 @@ namespace TatBlog.Services.Blogs
 		}
 
 
-		public async Task<bool> IsAuthorSlugExistedAsync(
-		int authorId, string authorSlug,
-		CancellationToken cancellationToken = default)
-		{
-			return await _context.Set<Author>()
-				.AnyAsync(x => x.Id != authorId && x.UrlSlug == authorSlug, cancellationToken);
-		}
-
-
 		// Lấy và phân trang danh sách chuyên mục
 		public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(
 			int pageNumber = 1,
@@ -461,23 +411,6 @@ namespace TatBlog.Services.Blogs
 			return category;
 		}
 
-
-		public async Task<Author> CreateOrUpdateAuthorAsync(
-		Author author, CancellationToken cancellationToken = default)
-		{
-			if (author.Id > 0)
-			{
-				_context.Set<Author>().Update(author);
-			}
-			else
-			{
-				_context.Set<Author>().Add(author);
-			}
-
-			await _context.SaveChangesAsync(cancellationToken);
-
-			return author;
-		}
 
 
 		public async Task<bool> DeleteCategoryAsync(
@@ -550,17 +483,7 @@ namespace TatBlog.Services.Blogs
 		}
 
 
-		public async Task<IPagedList<Author>> GetPagedAuthorsAsync(
-		AuthorQuery condition,
-		int pageNumber = 1,
-		int pageSize = 10,
-		CancellationToken cancellationToken = default)
-		{
-			return await FilterAuthors(condition).ToPagedListAsync(
-				pageNumber, pageSize,
-				nameof(Author.FullName), "DESC",
-				cancellationToken);
-		}
+
 
 		public async Task<IPagedList<Tag>> GetPagedTagsAsync(
 		CategoryQuery condition,
@@ -689,29 +612,7 @@ namespace TatBlog.Services.Blogs
 			return categories;
 		}
 
-		private IQueryable<Author> FilterAuthors(AuthorQuery condition)
-		{
-			IQueryable<Author> categories = _context.Authors;
-
-			if (!string.IsNullOrWhiteSpace(condition.Keyword))
-			{
-				categories = categories.Where(c => c.FullName.Contains(condition.Keyword) ||
-										 c.Notes.Contains(condition.Keyword));
-			}
-
-			if (!string.IsNullOrWhiteSpace(condition.AuthorSlug))
-			{
-				categories = categories.Where(c => c.UrlSlug.Contains(condition.AuthorSlug));
-			}
-
-			if (!string.IsNullOrWhiteSpace(condition.AuthorEmail))
-			{
-				categories = categories.Where(c => c.UrlSlug.Contains(condition.AuthorEmail));
-			}
-
-
-			return categories;
-		}
+		
 
 
 		private IQueryable<Tag> FilterTags(CategoryQuery condition)
