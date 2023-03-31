@@ -23,9 +23,9 @@ namespace TatBlog.WebApp.Validations
 				.WithMessage("Tên định danh không được để trống");
 
 			RuleFor(x => x.UrlSlug)
-				.MustAsync(async (categoryModel, slug, cancellationToken) =>
-				!await blogRepository.IsCategorySlugExistedAsync(
-					categoryModel.Id, slug, cancellationToken))
+				.MustAsync(async (tagModel, slug, cancellationToken) =>
+				!await blogRepository.IsTagSlugExistedAsync(
+					tagModel.Id, slug))
 				.WithMessage("Slug '{PropertyValue}' đã được sử dụng");
 
 			RuleFor(x => x.Description)

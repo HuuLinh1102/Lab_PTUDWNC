@@ -45,11 +45,7 @@ namespace TatBlog.Services.Blogs
             int postId, 
             CancellationToken cancellationToken = default);
 
-        //Lấy danh sách chuyên mục và số lượng bài viết
-        Task<IList<CategoryItem>> GetCategoriesAsync(
-            bool showOnMenu = false, 
-            CancellationToken cancellationToken = default);
-
+  
         // Lấy danh sách từ khóa/thẻ và phân trang theo
         // các tham số pagingParams
         Task<IPagedList<TagItem>> GetPagedTagsAsync(
@@ -72,35 +68,21 @@ namespace TatBlog.Services.Blogs
         Task<bool> CreateOrUpdateTagAsync(
         Tag tag, CancellationToken cancellationToken = default);
 
+        Task<bool> AddOrUpdateAsync(
+             Post post,
+             IEnumerable<string> tags,
+             CancellationToken cancellationToken = default);
+
 		// Xóa một thẻ,danh mục theo mã cho trước.
 		Task DeleteByIdAsync<T>(int id) where T : class, new();
 
-        // Thêm hoặc cập nhật một chuyên mục/chủ đề.
-        Task<Category> CreateOrUpdateCategoryAsync(
-        Category category, CancellationToken cancellationToken = default);
+        Task<bool> DeletePostAsync(
+        int postId, CancellationToken cancellationToken = default);
 
-
- 
-		// Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
-		Task<bool> IsCategorySlugExistedAsync(
-        int categoryId, string categorySlug,
-        CancellationToken cancellationToken = default);
-
- 
-
-        Task<bool> IsTagSlugExistedAsync(
+		Task<bool> IsTagSlugExistedAsync(
         int tagId, string tagSlug,
         CancellationToken cancellationToken = default);
 
-
-		Task<bool> DeleteCategoryAsync(
-        int categoryId, CancellationToken cancellationToken = default);
-
-        //Lấy và phân trang danh sách chuyên mục
-        Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(
-            int pageNumber = 1,
-            int pageSize = 10,
-            CancellationToken cancellationToken = default);
 
 		// Đếm số lượng bài viết trong N tháng gần nhất
 		Task<IList<MonthlyPostCount>> GetMonthlyPostCountsAsync(int months);
@@ -116,8 +98,6 @@ namespace TatBlog.Services.Blogs
         Task<bool> TogglePublishedFlagAsync(
         int postId, CancellationToken cancellationToken = default);
 
-        Task<bool> ToggleShowOnMenuFlagAsync(
-        int categoryId, CancellationToken cancellationToken = default);
 
 		// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
 		Task<IPagedList<Post>> GetPagedPostsAsync(
@@ -125,12 +105,6 @@ namespace TatBlog.Services.Blogs
             int pageNumber = 1,
             int pageSize = 10,
             CancellationToken cancellationToken = default);
-
-        Task<IPagedList<Category>> GetPagedCategoriesAsync(
-        CategoryQuery condition,
-        int pageNumber = 1,
-        int pageSize = 10,
-		CancellationToken cancellationToken = default);
 
 
         Task<IPagedList<Tag>> GetPagedTagsAsync(
@@ -156,5 +130,8 @@ namespace TatBlog.Services.Blogs
         Task<IList<Post>> GetPostsByMonthAsync(
             int year, int month);
 
+        Task<bool> SetImageUrlAsync(
+            int postId, string imageUrl,
+            CancellationToken cancellationToken = default);
 	}
 }

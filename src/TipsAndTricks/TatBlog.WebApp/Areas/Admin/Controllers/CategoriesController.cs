@@ -15,18 +15,18 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
     public class CategoriesController : Controller
     {
 		private readonly ILogger<CategoriesController> _logger;
-		private readonly IBlogRepository _blogRepository;
+		private readonly ICategoryRepository _categoryRepository;
 		private readonly IMediaManager _mediaManager;
 		private readonly IMapper _mapper;
 
 		public CategoriesController(
 			ILogger<CategoriesController> logger,
-			IBlogRepository blogRepository,
+			ICategoryRepository blogRepository,
 			IMediaManager mediaManager,
 			IMapper mapper)
 		{
 			_logger = logger;
-			_blogRepository = blogRepository;
+			_categoryRepository = blogRepository;
 			_mediaManager = mediaManager;
 			_mapper = mapper;
 		}
@@ -42,8 +42,8 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
 			_logger.LogInformation("Lấy danh sách chủ dề từ CSDL");
 
-			ViewBag.CategoriesList = await _blogRepository
-				.GetPagedCategoriesAsync(categoryQuery, pageNumber, pageSize);
+			ViewBag.CategoriesList = await _categoryRepository
+				.GetPagedCategoriesQueryAsync(categoryQuery, pageNumber, pageSize);
 			
 			_logger.LogInformation("Chuẩn bị dữ liệu cho ViewModel");
 
@@ -57,7 +57,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 			// ID = 0 <=> Thêm bài viết
 			// ID > 0 : Đọc dữ liệu của bài viết từ CSDL
 			var category = id > 0
-				? await _blogRepository.FindByIdAsync<Category>(id)
+				? await _categoryRepository.GetCategoryByIdAsync(id)
 				: null;
 
 			// Tạo view model từ dữ liệu của bài viết
@@ -87,7 +87,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 			}
 
 			var category = model.Id > 0
-				? await _blogRepository.FindByIdAsync<Category>(model.Id)
+				? await _categoryRepository.GetCategoryByIdAsync(model.Id)
 				: null;
 
 			if (category == null)
@@ -102,7 +102,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 			}
 
 
-			await _blogRepository.CreateOrUpdateCategoryAsync(category);
+			await _categoryRepository.AddOrUpdateAsync(category);
 
 			return RedirectToAction(nameof(Index));
 		}
@@ -111,7 +111,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 		public async Task<IActionResult> VerifyCategorySlug(
 			int id, string urlSlug)
 		{
-			var slugExisted = await _blogRepository
+			var slugExisted = await _categoryRepository
 				.IsCategorySlugExistedAsync(id, urlSlug);
 
 			return slugExisted
@@ -123,12 +123,12 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<IActionResult> ShowOnMenu(int id)
 		{
-			var category = await _blogRepository.FindByIdAsync<Category>(id);
+			var category = await _categoryRepository.GetCategoryByIdAsync(id);
 			if (category == null)
 			{
 				return NotFound();
 			}
-			await _blogRepository.ToggleShowOnMenuFlagAsync(id);
+			await _categoryRepository.ToggleShowOnMenuFlagAsync(id);
 
 			return RedirectToAction(nameof(Index));
 		}
@@ -136,13 +136,13 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Delete(int id)
 		{
-			var category = await _blogRepository.FindByIdAsync<Category>(id);
+			var category = await _categoryRepository.GetCategoryByIdAsync(id);
 			if (category == null)
 			{
 				return NotFound();
 			}
 
-			await _blogRepository.DeleteByIdAsync<Category>(id);
+			await _categoryRepository.DeleteCategoryAsync(id);
 
 			return RedirectToAction(nameof(Index));
 		}

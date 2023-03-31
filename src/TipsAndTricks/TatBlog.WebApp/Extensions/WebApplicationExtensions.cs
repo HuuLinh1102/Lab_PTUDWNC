@@ -40,6 +40,8 @@ namespace TatBlog.WebApp.Extensions
 
 			builder.Services.AddScoped<IMediaManager, LocalFileSystemMediaManager>();
 			builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+			builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+			builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 			builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 			builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
 			builder.Services.AddScoped<IDataSeeder, DataSeeder>();

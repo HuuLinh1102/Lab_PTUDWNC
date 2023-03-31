@@ -1,17 +1,13 @@
 ﻿using FluentValidation;
 using TatBlog.Services.Blogs;
-using TatBlog.WebApp.Areas.Admin.Models;
+using TatBlog.WebApi.Models;
 
-namespace TatBlog.WebApp.Validations
+namespace TatBlog.WebApi.Validations
 {
 	public class CategoryValidator : AbstractValidator<CategoryEditModel>
 	{
-		public readonly ICategoryRepository _categoryRepository;
-
-		public CategoryValidator(ICategoryRepository blogRepository)
+		public CategoryValidator() 
 		{
-			_categoryRepository = blogRepository;
-
 			RuleFor(x => x.Name)
 				.NotEmpty()
 				.MaximumLength(500)
@@ -22,16 +18,9 @@ namespace TatBlog.WebApp.Validations
 				.MaximumLength(1000)
 				.WithMessage("Tên định danh không được để trống");
 
-			RuleFor(x => x.UrlSlug)
-				.MustAsync(async (categoryModel, slug, cancellationToken) =>
-				!await blogRepository.IsCategorySlugExistedAsync(
-					categoryModel.Id, slug, cancellationToken))
-				.WithMessage("Slug '{PropertyValue}' đã được sử dụng");
-
 			RuleFor(x => x.Description)
 				.NotEmpty()
 				.WithMessage("Nội dung không được để trống");
-
 		}
 	}
 }
