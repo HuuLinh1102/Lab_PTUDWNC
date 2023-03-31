@@ -170,16 +170,32 @@ public class AuthorRepository : IAuthorRepository
 				cancellationToken) > 0;
 	}
 
-	public async Task<IList<Author>> GetPopularAuthorsAsync(
-			int numAuthors,
-			CancellationToken cancellationToken = default)
+	public async Task<IPagedList<AuthorItem>> GetPopularAuthorsAsync(
+		int numAuthors,
+		IPagingParams pagingParams,
+		CancellationToken cancellationToken = default)
 	{
-		return await _context.Set<Author>()
+		var authorsList = await _context.Set<Author>()
+			.AsNoTracking()
 			.Include(x => x.Posts)
-			.OrderByDescending(a => a.Posts.Count())
+			.Where(a => a.Posts.Any(p => p.Published))
+			.Select(a => new AuthorItem()
+			{
+				Id = a.Id,
+				FullName = a.FullName,
+				Email = a.Email,
+				JoinedDate = a.JoinedDate,
+				ImageUrl = a.ImageUrl,
+				UrlSlug = a.UrlSlug,
+				PostCount = a.Posts.Count(p => p.Published)
+			})
+			.OrderByDescending(a => a.PostCount)
 			.Take(numAuthors)
-			.ToListAsync(cancellationToken);
+			.ToPagedListAsync(pagingParams, cancellationToken);
+
+		return authorsList;
 	}
+
 
 	private IQueryable<Author> FilterAuthors(AuthorQuery condition)
 	{

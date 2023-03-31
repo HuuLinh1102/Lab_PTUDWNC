@@ -39,22 +39,23 @@ public interface IAuthorRepository
 
 
 	Task<bool> AddOrUpdateAsync(
-		Author author, 
+		Author author,
 		CancellationToken cancellationToken = default);
-	
+
 	Task<bool> DeleteAuthorAsync(
-		int authorId, 
+		int authorId,
 		CancellationToken cancellationToken = default);
 
 	Task<bool> IsAuthorSlugExistedAsync(
-		int authorId, string slug, 
+		int authorId, string slug,
 		CancellationToken cancellationToken = default);
 
 	Task<bool> SetImageUrlAsync(
 		int authorId, string imageUrl,
 		CancellationToken cancellationToken = default);
 
-	Task<IList<Author>> GetPopularAuthorsAsync(
-			int numAuthors,
-			CancellationToken cancellationToken = default);
+	Task<IPagedList<AuthorItem>> GetPopularAuthorsAsync(
+		int numAuthors,
+		IPagingParams pagingParams,
+		CancellationToken cancellationToken = default);
 }

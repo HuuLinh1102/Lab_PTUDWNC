@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System.Linq;
 
 using System.Text.RegularExpressions;
@@ -7,6 +8,7 @@ using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
+using TatBlog.Data.Mappings;
 using TatBlog.Services.Extensions;
 
 namespace TatBlog.Services.Blogs
@@ -15,10 +17,12 @@ namespace TatBlog.Services.Blogs
     {
 
         private readonly BlogDbContext _context;
+		private readonly IMemoryCache _memoryCache;
 
-        public BlogRepository(BlogDbContext context)
+		public BlogRepository(BlogDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+			_memoryCache = memoryCache;
         }
 
 
@@ -111,38 +115,6 @@ namespace TatBlog.Services.Blogs
                 cancellationToken);
         }
 
-        public async Task<IList<CategoryItem>> GetCategoriesAsync(
-            bool showOnMenu = false,
-            CancellationToken cancellationToken = default)
-        {
-            IQueryable<Category> categories = _context.Set<Category>();
-
-            if (showOnMenu)
-            {
-                categories = categories.Where(x => x.ShowOnMenu);
-            }
-            return await categories
-               .OrderBy(x => x.Name)
-               .Select(x => new CategoryItem()
-               {
-                   Id = x.Id,
-
-                   Name = x.Name,
-
-                   UrlSlug = x.UrlSlug,
-
-                   Description = x.Description,
-
-                   ShowOnMenu = x.ShowOnMenu,
-
-                   PostCount = x.Posts.Count(p => p.Published)
-               })
-               .ToListAsync(cancellationToken);
-        }
-
-
-
-
 
         public async Task<Post> GetPostByIdAsync(
         int postId, bool includeDetails = false,
@@ -180,8 +152,8 @@ namespace TatBlog.Services.Blogs
         }
 
 
-        // Tìm một thẻ, chuyên mục, bài viết theo tên định danh (slug) 
-        public async Task<T> FindBySlugAsync<T>(string slug) where T : class, IEntity
+		// Tìm một thẻ, chuyên mục, bài viết theo tên định danh (slug) 
+		public async Task<T> FindBySlugAsync<T>(string slug) where T : class, IEntity
         {
             return await _context.Set<T>().FirstOrDefaultAsync(x => x.UrlSlug == slug);
         }
@@ -250,6 +222,13 @@ namespace TatBlog.Services.Blogs
             }
         }
 
+		public async Task<bool> DeletePostAsync(
+		int postId, CancellationToken cancellationToken = default)
+		{
+			return await _context.Posts
+				.Where(x => x.Id == postId)
+				.ExecuteDeleteAsync(cancellationToken) > 0;
+		}
 
 		// Thêm hoặc cập nhật một bài viết.
 		public async Task<Post> CreateOrUpdatePostAsync(
@@ -258,7 +237,9 @@ namespace TatBlog.Services.Blogs
 		{
 			if (post.Id > 0)
 			{
-				await _context.Entry(post).Collection(x => x.Tags).LoadAsync(cancellationToken);
+				await _context.Entry(post)
+							  .Collection(x => x.Tags)
+							  .LoadAsync(cancellationToken);
 			}
 			else
 			{
@@ -276,7 +257,8 @@ namespace TatBlog.Services.Blogs
 
 			foreach (var kv in validTags)
 			{
-				if (post.Tags.Any(x => string.Compare(x.UrlSlug, kv.Key, StringComparison.InvariantCultureIgnoreCase) == 0)) continue;
+				if (post.Tags.Any(x => string.Compare(x.UrlSlug, kv.Key, 
+					StringComparison.InvariantCultureIgnoreCase) == 0)) continue;
 
 				var tag = await GetTagAsync(kv.Key, cancellationToken) ?? new Tag()
 				{
@@ -300,7 +282,60 @@ namespace TatBlog.Services.Blogs
 			return post;
 		}
 
-		
+
+		public async Task<bool> AddOrUpdateAsync(
+			Post post, 
+			IEnumerable<string> tags, 
+			CancellationToken cancellationToken = default)
+		{
+			if (post.Id > 0)
+			{
+				// Xóa các tag của bài viết cũ trong database
+				var oldPost = await _context.Posts.Include(p => p.Tags)
+					.FirstOrDefaultAsync(p => p.Id == post.Id, cancellationToken);
+				oldPost.Tags.Clear();
+				await _context.SaveChangesAsync(cancellationToken);
+
+				// Thêm các tag mới cho bài viết
+				foreach (var tagName in tags)
+				{
+					var tag = await _context.Tags
+						.FirstOrDefaultAsync(t => t.Name == tagName, cancellationToken);
+					if (tag == null)
+					{
+						tag = new Tag { Name = tagName };
+						_context.Tags.Add(tag);
+					}
+
+					post.Tags.Add(tag);
+				}
+
+				_context.Posts.Update(post);
+				_memoryCache.Remove($"post.by-id.{post.Id}");
+			}
+			else
+			{
+				// Thêm các tag mới cho bài viết
+				foreach (var tagName in tags)
+				{
+					var tag = await _context.Tags
+						.FirstOrDefaultAsync(t => t.Name == tagName, cancellationToken);
+					if (tag == null)
+					{
+						tag = new Tag { Name = tagName };
+						_context.Tags.Add(tag);
+					}
+
+					post.Tags.Add(tag);
+				}
+
+				_context.Posts.Add(post);
+			}
+
+			return await _context.SaveChangesAsync(cancellationToken) > 0;
+		}
+
+
 
 		// Tạo tên định danh (slug)
 		private static string GenerateSlug( string phrase)
@@ -323,15 +358,6 @@ namespace TatBlog.Services.Blogs
         }
 
 
-		// Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
-		public async Task<bool> IsCategorySlugExistedAsync(
-		int categoryId, string categorySlug,
-		CancellationToken cancellationToken = default)
-		{
-			return await _context.Set<Category>()
-				.AnyAsync(x => x.Id != categoryId && x.UrlSlug == categorySlug, cancellationToken);
-		}
-
 		public async Task<bool> IsTagSlugExistedAsync(
 		int tagId, string tagSlug,
 		CancellationToken cancellationToken = default)
@@ -341,27 +367,6 @@ namespace TatBlog.Services.Blogs
 		}
 
 
-		// Lấy và phân trang danh sách chuyên mục
-		public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(
-			int pageNumber = 1,
-            int pageSize = 10,
-            CancellationToken cancellationToken = default)
-
-        {
-            var categoryQuery = _context.Set<Category>().Select(c => new CategoryItem()
-
-            {
-
-                Id = c.Id,
-                Name = c.Name,
-                UrlSlug = c.UrlSlug,
-                Description = c.Description,
-                ShowOnMenu = c.ShowOnMenu,
-                PostCount = c.Posts.Count(p => p.Published)
-            });
-
-            return await categoryQuery.ToPagedListAsync(pageNumber,pageSize);
-        }
 
         // Đếm số lượng bài viết trong N tháng gần nhất
         public async Task<IList<MonthlyPostCount>> GetMonthlyPostCountsAsync(int months)
@@ -393,39 +398,6 @@ namespace TatBlog.Services.Blogs
             return monthlyCounts;
         }
 
-		// Thêm hay cập nhật một chuyên mục/chủ đề. 
-		public async Task<Category> CreateOrUpdateCategoryAsync(
-		Category category, CancellationToken cancellationToken = default)
-		{
-			if (category.Id > 0)
-			{
-				_context.Set<Category>().Update(category);
-			}
-			else
-			{
-				_context.Set<Category>().Add(category);
-			}
-
-			await _context.SaveChangesAsync(cancellationToken);
-
-			return category;
-		}
-
-
-
-		public async Task<bool> DeleteCategoryAsync(
-		int categoryId, CancellationToken cancellationToken = default)
-		{
-			var category = await _context.Set<Category>().FindAsync(categoryId);
-
-			if (category is null) return false;
-
-			_context.Set<Category>().Remove(category);
-			var rowsCount = await _context.SaveChangesAsync(cancellationToken);
-
-			return rowsCount > 0;
-		}
-
 
 		// Chuyển đổi trạng thái Published của bài viết. 
 		public async Task<bool> TogglePublishedFlagAsync(
@@ -442,18 +414,7 @@ namespace TatBlog.Services.Blogs
         }
 
 
-		public async Task<bool> ToggleShowOnMenuFlagAsync(
-		int categoryId, CancellationToken cancellationToken = default)
-		{
-			var category = await _context.Set<Category>().FindAsync(categoryId);
-
-			if (category is null) return false;
-
-			category.ShowOnMenu = !category.ShowOnMenu;
-			await _context.SaveChangesAsync(cancellationToken);
-
-			return category.ShowOnMenu;
-		}
+		
 
 
 		// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm 
@@ -469,20 +430,6 @@ namespace TatBlog.Services.Blogs
 				nameof(Post.PostedDate), "DESC",
 				cancellationToken);
 		}
-
-		public async Task<IPagedList<Category>> GetPagedCategoriesAsync(
-		CategoryQuery condition,
-		int pageNumber = 1,
-		int pageSize = 10,
-		CancellationToken cancellationToken = default)
-		{
-			return await FilterCategories(condition).ToPagedListAsync(
-				pageNumber, pageSize,
-				nameof(Category.Name), "DESC",
-				cancellationToken);
-		}
-
-
 
 
 		public async Task<IPagedList<Tag>> GetPagedTagsAsync(
@@ -583,37 +530,7 @@ namespace TatBlog.Services.Blogs
 			return posts;
 		}
 
-		private IQueryable<Category> FilterCategories(CategoryQuery condition)
-		{
-			IQueryable<Category> categories = _context.Categories;
-
-			if (!string.IsNullOrWhiteSpace(condition.Keyword))
-			{
-				categories = categories.Where(c => c.Name.Contains(condition.Keyword) ||
-										 c.Description.Contains(condition.Keyword));
-			}
-
-			if (!string.IsNullOrWhiteSpace(condition.CategorySlug))
-			{
-				categories = categories.Where(c => c.UrlSlug.Contains(condition.CategorySlug));
-			}
-
-			if (condition.ShowOnMenu)
-			{
-				categories = categories.Where(c => c.ShowOnMenu == condition.ShowOnMenu);
-			}
-
-			if (condition.NotShowOnMenu)
-			{
-				categories = categories.Where(c => c.ShowOnMenu == condition.NotShowOnMenu);
-			}
-
-
-			return categories;
-		}
-
 		
-
 
 		private IQueryable<Tag> FilterTags(CategoryQuery condition)
 		{
@@ -654,6 +571,15 @@ namespace TatBlog.Services.Blogs
 			return posts;
 		}
 
-
+		public async Task<bool> SetImageUrlAsync(
+		int postId, string imageUrl,
+		CancellationToken cancellationToken = default)
+		{
+			return await _context.Posts
+				.Where(x => x.Id == postId)
+				.ExecuteUpdateAsync(x =>
+					x.SetProperty(a => a.ImageUrl, a => imageUrl),
+					cancellationToken) > 0;
+		}
 	}
 }

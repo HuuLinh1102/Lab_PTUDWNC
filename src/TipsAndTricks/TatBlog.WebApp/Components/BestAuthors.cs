@@ -14,8 +14,9 @@ namespace TatBlog.WebApp.Components
 
 		public async Task<IViewComponentResult> InvokeAsync()
 		{
+			
 			// Lấy danh sách tác giả
-			var authors = await _authorRepository.GetPopularAuthorsAsync(4);
+			var authors = await _authorRepository.GetPopularAuthorsAsync(4,null);
 
 			return View(authors);
 		}
