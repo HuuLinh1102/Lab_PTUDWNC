@@ -1,0 +1,23 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css");
+
+body {
+  margin: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.navbar-nav .nav-link.active, .navbar-nav .show>.nav-link {
+  color: var(--bs-warning);
+}
+
+.card-img-top {
+  object-fit: cover;
+}
+
+.single-post .featured-image {
+  object-fit: cover;
+  width: 100%;
+}
